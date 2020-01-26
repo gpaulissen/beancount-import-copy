@@ -771,6 +771,7 @@ class ParsedOfxStatement(object):
             return get_subaccount(inv401ksource, 'Cash' if has_securities else None)
 
         for raw in self.raw_transactions:
+            checknum_is_numeric = False # GJP 2020-01-18  The CHECKNUM field is not numeric as described in the OFX specification
             match_key = (ofx_id, raw.date, raw.fitid)
             if has_real_cash_account:
                 if has_securities and match_key in matched_transactions:
@@ -838,9 +839,12 @@ class ParsedOfxStatement(object):
                 posting_meta[OFX_NAME_KEY] = name
 
             if raw.checknum:
-                stripped_checknum = raw.checknum.lstrip('0')
-                if stripped_checknum:
-                    posting_meta[CHECK_KEY] = D(stripped_checknum)
+                if not checknum_is_numeric:
+                    posting_meta[CHECK_KEY] = raw.checknum
+                else:
+                    stripped_checknum = raw.checknum.lstrip('0')
+                    if stripped_checknum:
+                        posting_meta[CHECK_KEY] = D(stripped_checknum)
 
             cash_transfer_transaction_amount = None
             if raw.trantype == 'INCOME' or raw.trantype == 'INVBANKTRAN' or raw.trantype == 'STMTTRN':
