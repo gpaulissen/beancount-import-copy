@@ -15,6 +15,7 @@
 ;           ]
 2013-12-15 * "STMTTRN - EFTPOS WDL HANDYWAY ALDI STORE GEELONG WEST VICAU"
   Assets:Checking:Suncorp  -16.85 AUD
+    check: "0"
     date: 2013-12-15
     ofx_fitid: "1"
     ofx_memo: "EFTPOS WDL HANDYWAY ALDI STORE GEELONG WEST VICAU"

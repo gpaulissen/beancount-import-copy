@@ -15,7 +15,7 @@
 ;           ]
 2012-07-20 * "INVBANKTRAN - Check Paid #0000001001"
   Assets:Savings:Fidelity  -1500.00 USD
-    check: 1001
+    check: "0000001001"
     date: 2012-07-20
     ofx_fitid: "X0000000000000000000001"
     ofx_memo: "Check Paid #0000001001"

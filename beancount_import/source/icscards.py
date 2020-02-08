@@ -1,4 +1,5 @@
 # -*-coding: utf-8-*-
+# coding=utf-8
 
 """ICScards.nl transaction and balance source.
 
@@ -13,8 +14,7 @@ The transactions files are in PDF format and although it is possible to use
 Python to create a CSV file from it (for example using the pdftotext script as
 in other beanimport modules), the result is not at all good enough to use
 it. I therefore suggest that you install 'WPS PDF to Word' (also converts to
-Excel XLSX) from https://wps.com and later use Python module xlsx2cxv
-(http://github.com/dilshod/xlsx2csv) to convert that to CSV.
+Excel XLSX) from https://wps.com and later use Python module openpyxl to read it.
 
 So the suggested workflow is:
 1) Download the transaction statements from https://icscards.nl either
@@ -125,37 +125,16 @@ transaction of the following form is generated:
         icscards_type: "Payment"
       Expenses:FIXME  -1150.00 USD
 
-If you transfer funds from your Venmo balance to a bank account, a single
-transaction is generated:
-
-    2017-09-06 * "Venmo" "Transfer"
-      Assets:Venmo    -1150.00 USD
-        date: 2017-09-06
-        venmo_account_description: "My Bank *8967"
-        venmo_transfer_id: "355418184"
-        venmo_type: "Standard Transfer"
-      Expenses:FIXME   1150.00 USD
-
-The `venmo_payment_id` and `venmo_transfer_id` metadata fields are used to
-associate transactions in the Beancount journal with rows in the
-`transactions.csv` file.
-
-For transfer transactions (transactions with a `venmo_transfer_id` metadata
-field), the `venmo_type` and `venmo_account_description` metadata fields provide
-features for predicting the unknown account.
-
-For payment transactions (transactions with a `venmo_payment_id` metadata
-field), the `venmo_type`, `venmo_description`, and `venmo_payee`/`venmo_payer`
-metadata fields provide features for predicting the unknown account.
 """
 
 from typing import List, Union, Optional, Set
-import csv
+from openpyxl import load_workbook
 import datetime
 import collections
 import re
 import os
 import locale
+from decimal import Decimal
 
 from beancount.core.data import Transaction, Posting, Balance, EMPTY_SET
 from beancount.core.amount import Amount
@@ -169,27 +148,28 @@ from ..journal_editor import JournalEditor
 
 DEBUG = True
 
-def convert_str_to_list(str, max_items, sep=r'\s\s+'):
+def convert_str_to_list(str, max_items, sep=r'\s\s+|\t|\n'):
     return [x for x in re.split(sep, str)[0:max_items]]
 
-def convert_str_to_id_list(str, max_items, sep=r'\s\s+'):
+def convert_str_to_id_list(str, max_items, sep=r'\s\s+|\t|\n'):
     return [x.replace(' ', '_') for x in re.split(sep, str)[0:max_items]]
 
 # account may be either the icscards_id or the journal account name
 ICScardsEntry = collections.namedtuple(
     'ICScardsEntry',
-    ['account', 'date', 'amount', 'source_desc', 'filename', 'line'])
+    ['account', 'date', 'amount', 'price', 'source_desc', 'filename', 'line'])
 RawBalance = collections.namedtuple(
-    'RawBalance', convert_str_to_id_list("Vorig openstaand saldo               Totaal ontvangen betalingen       Totaal nieuwe uitgaven                Nieuw openstaand saldo", 4))
+    'RawBalance', ['account', 'date', 'amount', 'filename', 'line'])
 
 def get_info(raw_entry: Union[ICScardsEntry, RawBalance]) -> dict:
     return dict(
-        type='text/csv',
+        # type='text/csv',
+        type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         filename=raw_entry.filename,
         line=raw_entry.line,
     )
 
-def load_transactions(filename: str, currency: str = 'USD') -> List[ICScardsEntry]:
+def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEntry], List[RawBalance]]:
     def add_years(d, years):
         """Return a date that's `years` years after the date (or datetime)
         object `d`. Return the same calendar date (month and day) in the
@@ -216,6 +196,12 @@ def load_transactions(filename: str, currency: str = 'USD') -> List[ICScardsEntr
         "Omschrijving Bedrag in vreemde valuta", # actually two fields but hey any PDF converter can have errors in it
         "Bedrag in euro's"
     ]
+    balance_names = [
+        "Vorig openstaand saldo",
+        "Totaal ontvangen betalingen",
+        "Totaal nieuwe uitgaven",
+        "Nieuw openstaand saldo"
+    ]
     # Actual fields
     actual_field_names = [
         "Datum transactie",
@@ -227,118 +213,133 @@ def load_transactions(filename: str, currency: str = 'USD') -> List[ICScardsEntr
         "Bedrag in euro's",
         "Bij/Af"
     ]
-    NewPageCell = 'Datum                                          ICS-klantnummer                         Volgnummer                                Bladnummer'
+    new_page_names = [
+        'Datum',
+        'ICS-klantnummer',
+        'Volgnummer',
+        'Bladnummer'
+    ]
     page_date = None
 
+    breakpoint()
+    
     locale.setlocale(category=locale.LC_ALL, locale="Dutch") # Need to parse "05 mei" i.e. "05 may"
 
     try:
         entries = []
+        balances = []
         account = None
         new_page = False
         filename = os.path.abspath(filename)
-        with open(filename, 'r', encoding='utf-8', newline='') as csvfile:
-            reader = csv.reader(csvfile, quotechar='"') 
-            for line_i, row in enumerate(reader, start=1):
-                # Handle new pages
-                if new_page:
+        wb = load_workbook(filename, read_only=True)
+        for sheet_i, sheet_name in enumerate(wb.sheetnames, start=1):
+            sheet = wb[sheet_name]
+            for line_i, row in enumerate(sheet.rows, start=1):
+                # First line with account number in column F
+                if sheet_i == 1 and line_i == 1:
+                    account = re.search('Bankrek. (.+) BIC:', row[5].value).group(1)
+                # Handle the two new page rows
+                elif (sheet_i == 1 and line_i == 2):
+                    assert convert_str_to_list(row[0].value, 4) == new_page_names
+                    new_page = True
+                elif (sheet_i > 1 and line_i == 1):
+                    assert [col.value for col in row[0:4]] == new_page_names
+                    new_page = True
+                elif new_page:
                     new_page = False
                     if page_date == None:
-                        page_date = datetime.datetime.strptime(convert_str_to_list(row[0], 1)[0], '%d %B %Y')
-                elif row[0] == NewPageCell:
-                    new_page = True
-                else:
-                    # Only keep the non null items
-                    row = [x for x in row if x != '']
-
-                    if DEBUG:
-                        print("[%s] %s\n" % (line_i, row))
-
-                    if line_i == 1:
-                        account = re.search('Bankrek. (.+) BIC:', row[1]).group(1)
-                    elif line_i == 5:
-                        field_names = [re.sub(r'\s+', ' ', x).strip() for x in row]
-                        if field_names != expected_field_names:
-                            raise RuntimeError(
-                                'Actual field names %r != expected field names %r' %
-                                (field_names, expected_field_names))
-                    elif not(len(row) >= 5 and len(row) <= 8):
-                        continue
+                        page_date = datetime.datetime.strptime(convert_str_to_list(row[0].value, 1)[0], '%d %B %Y')
+                # Handle the balance row
+                elif (sheet_i == 1 and line_i == 4) or (sheet_i > 1 and line_i == 3):
+                    balance_names_actual, number, transaction_type = None, None, None
+                    if sheet_i == 1:
+                        cols = convert_str_to_list(row[0].value, 12)
+                        balance_names_actual = cols[0:4]
+                        number, transaction_type = cols[-2:]
                     else:
-                        # Use transaction date, skip booking date
+                        cols0 = convert_str_to_list(row[0].value, 3)
+                        cols1 = convert_str_to_list(row[1].value, 1)
+                        cols2 = convert_str_to_list(row[2].value, 1)
+                        cols3 = convert_str_to_list(row[3].value, 1)
+                        balance_names_actual = [cols0[0], cols1[0], cols2[0], cols3[0]]                                        
+                        number, transaction_type = cols0[1:]  # Skip euro sign
+                    assert balance_names_actual == balance_names, print("Actual: {0}; Expected: {1}".format(balance_names_actual, balance_names))
+                        
+                    # number something like € 1.827,97
+                    number = Decimal(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+                    if transaction_type == 'Af':
+                        number = -number
+                    elif transaction_type != 'Bij':
+                        raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
+                    balances.append(
+                        RawBalance(
+                            account=account,
+                            date=page_date,
+                            amount=Amount(number=number, currency='EUR'),
+                            filename=filename,
+                            line=line_i))
+                # Handle the rest
+                else:
+                    # Only keep the non null columns
+                    row = [col for col in row if col.value != None]
+                    if len(row) == 5 or len(row) == 7 or len(row) == 8:
+                        # Use transaction date, index 0
                         try:
-                            date = get_date(row[0])
+                            date = get_date(row[0].value)
                         except Exception as e:
-                            raise RuntimeError('Invalid date: %r' % row[0]) from e
+                            raise RuntimeError('Invalid date: {0}'.format(row[0].value)) from e
 
-                        # Description
-                        source_desc = row[2]
+                        # Skip booking date, index 1
+                        
+                        # Description (2)
+                        source_desc = row[2].value
 
                         # Add place and country
                         if len(row) >= 7:
-                            source_desc += ", %s (%s)" % (row[3], row[4])
+                            source_desc += ", {0} ({1})".format(row[3].value, row[4].value)
 
+                        # Is there a price?
+                        price = None
+                        price_currency = None
+                        if len(row) == 8:
+                            price = D(row[-3].value)
+                            price_currency = row[-3].number_format[-4:-1]
+                            
                         # Skip amount in foreign currency
-                        number = D(row[-2])
+                        number = D(row[-2].value)
                         if number == ZERO:
                             # Skip zero-dollar transactions.
                             # Some banks produce these, e.g. for an annual fee that is waived.
                             continue
                         
-                        transaction_type = row[-1]
+                        transaction_type = row[-1].value
                         if transaction_type == 'Af':
                             number = -number
+                            price = -price if price != None else None
                         elif transaction_type != 'Bij':
-                            raise RuntimeError('Unknown transaction type: %r in row %r'
-                                               % (transaction_type, row))
-
+                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, row))
+                        
                         entry = ICScardsEntry(account=account,
                                               date=date,
                                               source_desc=source_desc,
                                               amount=Amount(number=number, currency='EUR'),
+                                              price=Amount(number=price, currency=price_currency) if price != None else None,
                                               filename=filename,
                                               line=line_i)
                         if DEBUG:
                             print(entry)
                         entries.append(entry)
-                        
+
+        # No need to sort balances: there is just one
         entries.reverse()
         entries.sort(key=lambda x: x.line)  # sort by date first, line next
         if DEBUG:
             print(entries)
-        return entries
+            print(balances)
+        return entries, balances
 
     except Exception as e:
-        raise RuntimeError('CSV file has incorrect format', filename) from e
-
-
-def load_balances(filename: str) -> List[RawBalance]:
-    expected_field_names = [
-        'Name', 'Currency', 'Balance', 'Last Updated', 'State',
-        'Last Transaction'
-    ]
-    balances = []
-    filename = os.path.abspath(filename)
-    with open(filename, 'r', encoding='utf-8', newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        if reader.fieldnames != expected_field_names:
-            raise RuntimeError(
-                'Actual field names %r != expected field names %r' %
-                (reader.fieldnames, expected_field_names))
-        for line_i, row in enumerate(reader):
-            date_str = row['Last Transaction'].strip()
-            if not date_str:
-                continue
-            date = datetime.datetime.strptime(date_str, icscards_date_format).date()
-            balances.append(
-                RawBalance(
-                    account=row['Name'],
-                    date=date,
-                    amount=Amount(D(row['Balance']), row['Currency']),
-                    filename=filename,
-                    line=line_i + 1))
-        return balances
-
+        raise RuntimeError('XLSX file has incorrect format', filename) from e
 
 def _get_key_from_posting(entry: Transaction, posting: Posting,
                           source_postings: List[Posting], source_desc: str,
@@ -348,7 +349,7 @@ def _get_key_from_posting(entry: Transaction, posting: Posting,
     return (posting.account, posting_date, posting.units, source_desc)
 
 
-def _get_key_from_csv_entry(x: ICScardsEntry):
+def _get_key_from_entry(x: ICScardsEntry):
     return (x.account, x.date, x.amount, x.source_desc)
 
 
@@ -366,7 +367,7 @@ def _make_import_result(icscards_entry: ICScardsEntry) -> ImportResult:
                 account=icscards_entry.account,
                 units=icscards_entry.amount,
                 cost=None,
-                price=None,
+                price=icscards_entry.price,
                 flag=None,
                 meta=collections.OrderedDict(
                     source_desc=icscards_entry.source_desc,
@@ -395,11 +396,8 @@ class ICScardsSource(description_based_source.DescriptionBasedSource):
 
         # In these entries, account refers to the icscards_id, not the journal account.
         self.log_status('icscards: loading %s' % filename)
-        self.icscards_entries = load_transactions(filename)
-
         # Balances are in the same file
-        self.log_status('icscards: loading %s' % filename)
-        self.balances = load_balances(filename)
+        self.icscards_entries, self.balances = load_transactions(filename)
 
     def prepare(self, journal: JournalEditor, results: SourceResults) -> None:
         account_to_icscards_id, icscards_id_to_account = description_based_source.get_account_mapping(
@@ -420,7 +418,7 @@ class ICScardsSource(description_based_source.DescriptionBasedSource):
             journal_entries=journal.all_entries,
             account_set=account_to_icscards_id.keys(),
             get_key_from_posting=_get_key_from_posting,
-            get_key_from_raw_entry=_get_key_from_csv_entry,
+            get_key_from_raw_entry=_get_key_from_entry,
             make_import_result=_make_import_result,
             results=results)
 
@@ -451,18 +449,3 @@ class ICScardsSource(description_based_source.DescriptionBasedSource):
 
 def load(spec, log_status):
     return ICScardsSource(log_status=log_status, **spec)
-
-def main():
-    import argparse
-
-    ap = argparse.ArgumentParser()
-    ap.add_argument('path')
-
-    args = ap.parse_args()
-
-    f_in = csv.reader(open(args.path), quotechar='"', newline='')
-    for line in f_in:
-        print(line)
-
-if __name__ == '__main__':
-    main()

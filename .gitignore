@@ -9,3 +9,7 @@ beancount_import/frontend_dist
 htmlcov/
 *~
 testdata/source/icscards/*.csv
+.project
+.pydevproject
+.settings
+pytest.log
