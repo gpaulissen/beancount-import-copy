@@ -86,7 +86,7 @@ Line Text
 31   "€ 2.500                                                               € 1.903,76",,,,,,,,,,,,
 32   Dit product valt onder het depositogarantiestelsel. Meer informatie vindt u op www.icscards.nl/depositogarantiestelsel en op het informatieblad dat u jaarlijks ontvangt.,,,,,,,,,,,,
 
-The associated bank account is specified in row 1, column 2 after 'Bankrek.' and before 'BIC'.
+The associated account is specified in row 3, column 2 below haeding ICS-klantnummer (ICS client number).
 
 Rows 2 and 3 are repeated every page and show the page number.
 
@@ -134,7 +134,6 @@ import collections
 import re
 import os
 import locale
-from decimal import Decimal
 
 from beancount.core.data import Transaction, Posting, Balance, EMPTY_SET
 from beancount.core.amount import Amount
@@ -183,7 +182,7 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
             return d + (date(d.year + years, 1, 1) - date(d.year, 1, 1))
 
     def get_date(s: str):
-        d = datetime.datetime.strptime(s, '%d %b')
+        d = datetime.datetime.strptime(s, '%d %b').date()
         # Without a year it will be 1900 so augment
         while d <= page_date:
             d = add_years(d, 1)
@@ -221,8 +220,6 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
     ]
     page_date = None
 
-    breakpoint()
-    
     locale.setlocale(category=locale.LC_ALL, locale="Dutch") # Need to parse "05 mei" i.e. "05 may"
 
     try:
@@ -235,11 +232,8 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
         for sheet_i, sheet_name in enumerate(wb.sheetnames, start=1):
             sheet = wb[sheet_name]
             for line_i, row in enumerate(sheet.rows, start=1):
-                # First line with account number in column F
-                if sheet_i == 1 and line_i == 1:
-                    account = re.search('Bankrek. (.+) BIC:', row[5].value).group(1)
                 # Handle the two new page rows
-                elif (sheet_i == 1 and line_i == 2):
+                if (sheet_i == 1 and line_i == 2):
                     assert convert_str_to_list(row[0].value, 4) == new_page_names
                     new_page = True
                 elif (sheet_i > 1 and line_i == 1):
@@ -248,7 +242,8 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
                 elif new_page:
                     new_page = False
                     if page_date == None:
-                        page_date = datetime.datetime.strptime(convert_str_to_list(row[0].value, 1)[0], '%d %B %Y')
+                        page_date, account = convert_str_to_list(row[0].value, 2)
+                        page_date = datetime.datetime.strptime(page_date, '%d %B %Y').date()
                 # Handle the balance row
                 elif (sheet_i == 1 and line_i == 4) or (sheet_i > 1 and line_i == 3):
                     balance_names_actual, number, transaction_type = None, None, None
@@ -266,7 +261,8 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
                     assert balance_names_actual == balance_names, print("Actual: {0}; Expected: {1}".format(balance_names_actual, balance_names))
                         
                     # number something like € 1.827,97
-                    number = Decimal(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+                    number = D(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+
                     if transaction_type == 'Af':
                         number = -number
                     elif transaction_type != 'Bij':
@@ -284,6 +280,7 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
                     row = [col for col in row if col.value != None]
                     if len(row) == 5 or len(row) == 7 or len(row) == 8:
                         # Use transaction date, index 0
+                        breakpoint()
                         try:
                             date = get_date(row[0].value)
                         except Exception as e:
@@ -302,11 +299,11 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
                         price = None
                         price_currency = None
                         if len(row) == 8:
-                            price = D(row[-3].value)
+                            price = D(str(row[-3].value))
                             price_currency = row[-3].number_format[-4:-1]
                             
                         # Skip amount in foreign currency
-                        number = D(row[-2].value)
+                        number = D(str(row[-2].value))
                         if number == ZERO:
                             # Skip zero-dollar transactions.
                             # Some banks produce these, e.g. for an annual fee that is waived.

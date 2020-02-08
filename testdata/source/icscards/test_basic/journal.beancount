@@ -1,5 +1,5 @@
 1900-01-01 open Liabilities:Credit-Card  EUR
-  icscards_id: "My Credit Card"
+  icscards_id: "99999999999"
 
 1900-01-01 open Assets:Checking  EUR
   icscards_id: "My Checking"

@@ -17,7 +17,6 @@ examples = [
 
 @pytest.mark.parametrize('name', examples)
 def test_source(name: str):
-    breakpoint()
     check_source_example(
         example_dir=os.path.join(testdata_dir, name),
         source_spec={
