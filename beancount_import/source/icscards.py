@@ -251,34 +251,32 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                         page_date = datetime.datetime.strptime(page_date, '%d %B %Y').date()
                 # Handle the balance row
                 elif (sheet_i == 1 and line_i == 4) or (sheet_i > 1 and line_i == 3):
-                    balance_names_actual, number, transaction_type = None, None, None
+                    balance_names_actual = None
                     if sheet_i == 1:
                         cols = convert_str_to_list(row[0].value, 12)
                         balance_names_actual = cols[0:4]
                         number, transaction_type = cols[-2:]
+                        # number something like € 1.827,97
+                        number = D(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+                        if transaction_type == 'Af':
+                            number = -number
+                        elif transaction_type != 'Bij':
+                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
+                        balances.append(
+                            RawBalance(
+                                account=account,
+                                date=page_date,
+                                amount=Amount(number=number, currency='EUR'),
+                                filename=filename,
+                                line=((sheet_i-1)*100)+line_i))
                     else:
                         cols0 = convert_str_to_list(row[0].value, 3)
                         cols1 = convert_str_to_list(row[1].value, 1)
                         cols2 = convert_str_to_list(row[2].value, 1)
                         cols3 = convert_str_to_list(row[3].value, 1)
-                        balance_names_actual = [cols0[0], cols1[0], cols2[0], cols3[0]]                                        
-                        number, transaction_type = cols0[1:]  # Skip euro sign
+                        # sheet 'Table 3' contains "Nieuw openstaand saldo Af" in fourth column
+                        balance_names_actual = [cols0[0], cols1[0], cols2[0], cols3[0].replace(' Af', '')]                                        
                     assert balance_names_actual == balance_names, print("Actual: {0}; Expected: {1}".format(balance_names_actual, balance_names))
-                        
-                    # number something like € 1.827,97
-                    number = D(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
-
-                    if transaction_type == 'Af':
-                        number = -number
-                    elif transaction_type != 'Bij':
-                        raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
-                    balances.append(
-                        RawBalance(
-                            account=account,
-                            date=page_date,
-                            amount=Amount(number=number, currency='EUR'),
-                            filename=filename,
-                            line=line_i))
                 # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
                 elif len(row) == 5 or len(row) == 7 or len(row) == 8:
                     # Use transaction date, index 0
@@ -300,8 +298,14 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     price = None
                     price_currency = None
                     if len(row) == 8:
-                        price = D(str(row[-3].value))
-                        price_currency = row[-3].number_format[-4:-1]
+                        if row[-3].number_format == 'General':
+                            # '235,01 EGP'
+                            price = locale.atof(row[-3].value[0:-4])
+                            price_currency = row[-3].value[-3:]
+                        else:
+                            price = row[-3].value
+                            price_currency = row[-3].number_format[-4:-1]                            
+                        price = D(str(price)) # convert to str to keep just the last two decimals
                             
                     # Skip amount in foreign currency
                     number = D(str(row[-2].value))
@@ -323,14 +327,17 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                                           amount=Amount(number=number, currency='EUR'),
                                           price=Amount(number=price, currency=price_currency) if price != None else None,
                                           filename=filename,
-                                          line=line_i)
+                                          line=((sheet_i-1)*100)+line_i)
                     if DEBUG:
                         print(entry)
                     entries.append(entry)
 
         # No need to sort balances: there is just one
-        entries.reverse()
-        entries.sort(key=lambda x: x.line)  # sort by date first, line next
+        assert len(balances) == 1, print("Only the balance for the first sheet should be there")
+        # No need to sort entries: already sorted by sheet + line
+        
+        # entries.reverse()
+        # entries.sort(key=lambda x: x.line)  # sort by date first, line next
         if DEBUG:
             print(entries)
             print(balances)

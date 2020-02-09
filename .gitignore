@@ -13,3 +13,4 @@ testdata/source/icscards/*.csv
 .pydevproject
 .settings
 pytest.log
+~$*.xlsx
