@@ -37,7 +37,8 @@ containing all downloaded transactions, in the normal PDF download format
 provided by ICScards.  See the `testdata/source/icscards` directory for an
 example.
 
-The `Rekeningoverzicht-54280230027-2020-01.csv` file should be of the form:
+The XLSX (converted to CSV for your convenience because including an XLSX in
+source is not very helpful) should be of the form:
 
 Line Text
 
@@ -86,16 +87,24 @@ Line Text
 31   "€ 2.500                                                               € 1.903,76",,,,,,,,,,,,
 32   Dit product valt onder het depositogarantiestelsel. Meer informatie vindt u op www.icscards.nl/depositogarantiestelsel en op het informatieblad dat u jaarlijks ontvangt.,,,,,,,,,,,,
 
-The associated account is specified in row 3, column 2 below haeding ICS-klantnummer (ICS client number).
+The first line is only shown on the first sheet and contains some general information about ICScards.
 
-Rows 2 and 3 are repeated every page and show the page number.
+The associated account is specified in row 3, column 2 below heading
+'ICS-klantnummer' (ICS client number).
 
-The balances are in the fourth row in the first column surrounded by double quotes.
+Lines 2 and 3 are repeated every page (a new sheet in the XLSX) and show the
+page number.
 
-The payments to your ICScards card are in rows 6 and 7.
+The balance is in the fourth line in the first column (actually a list
+containing 12 columns separated by at least two spaces or a newline).
 
-The payments from your ICScards are in row 9 till 28 where rows 20 and 26
-are just information about currency conversions.
+The payments to your ICScards card are in lines 6 and 7, 5 non-empty columns in
+total.
+
+The payments from your ICScards are in line 9 till 28 where lines 20 and 26 are
+just information about currency conversions. Please note that line 25 contains
+a price in USD although the CSV does not show it (but the XLSX does).  The
+number of columns is 7 or 8 dependening on whether the price is included.
 
 Specifying the source to beancount_import
 =========================================
@@ -105,7 +114,7 @@ expression like the following to specify the icscards source:
 
     dict(module='beancount_import.source.icscards',
          directory=os.path.join(journal_dir, 'data', 'icscards', 'account_id'),
-         assets_account='Assets:Icscards',
+         assets_account='Assets:ICScards',
     )
 
 where `journal_dir` refers to the financial/ directory.
@@ -113,11 +122,11 @@ where `journal_dir` refers to the financial/ directory.
 Imported transaction format
 ===========================
 
-If you receive a payment, or make a payment from your Icscards balance, a single
+If you receive a payment, or make a payment from your ICScards balance, a single
 transaction of the following form is generated:
 
     2017-09-06 * "Sally Smith" "Rent"
-      Assets:Icscards     1150.00 USD
+      Assets:ICScards     1150.00 USD
         date: 2017-09-06
         icscards_description: "Rent"
         icscards_payer: "Sally Smith"
@@ -162,13 +171,12 @@ RawBalance = collections.namedtuple(
 
 def get_info(raw_entry: Union[ICScardsEntry, RawBalance]) -> dict:
     return dict(
-        # type='text/csv',
         type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         filename=raw_entry.filename,
         line=raw_entry.line,
     )
 
-def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEntry], List[RawBalance]]:
+def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEntry], List[RawBalance]]:
     def add_years(d, years):
         """Return a date that's `years` years after the date (or datetime)
         object `d`. Return the same calendar date (month and day) in the
@@ -188,21 +196,21 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
             d = add_years(d, 1)
         return add_years(d, -1)
 
-    # As from the CSV
-    expected_field_names = [
-        "Datum transactie",
-        "Datum boeking",
-        "Omschrijving Bedrag in vreemde valuta", # actually two fields but hey any PDF converter can have errors in it
-        "Bedrag in euro's"
+    new_page_names = [
+        'Datum',
+        'ICS-klantnummer',
+        'Volgnummer',
+        'Bladnummer'
     ]
+    page_date = None
     balance_names = [
         "Vorig openstaand saldo",
         "Totaal ontvangen betalingen",
         "Totaal nieuwe uitgaven",
         "Nieuw openstaand saldo"
     ]
-    # Actual fields
-    actual_field_names = [
+    # A line (transaction)
+    transaction_names = [
         "Datum transactie",
         "Datum boeking",
         "Omschrijving",
@@ -212,14 +220,9 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
         "Bedrag in euro's",
         "Bij/Af"
     ]
-    new_page_names = [
-        'Datum',
-        'ICS-klantnummer',
-        'Volgnummer',
-        'Bladnummer'
-    ]
-    page_date = None
 
+    current_locale = locale.setlocale(category=locale.LC_ALL) # Save locale
+    
     locale.setlocale(category=locale.LC_ALL, locale="Dutch") # Need to parse "05 mei" i.e. "05 may"
 
     try:
@@ -232,6 +235,8 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
         for sheet_i, sheet_name in enumerate(wb.sheetnames, start=1):
             sheet = wb[sheet_name]
             for line_i, row in enumerate(sheet.rows, start=1):
+                # Only keep the non null columns
+                row = [col for col in row if col.value != None]
                 # Handle the two new page rows
                 if (sheet_i == 1 and line_i == 2):
                     assert convert_str_to_list(row[0].value, 4) == new_page_names
@@ -274,58 +279,54 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
                             amount=Amount(number=number, currency='EUR'),
                             filename=filename,
                             line=line_i))
-                # Handle the rest
-                else:
-                    # Only keep the non null columns
-                    row = [col for col in row if col.value != None]
-                    if len(row) == 5 or len(row) == 7 or len(row) == 8:
-                        # Use transaction date, index 0
-                        breakpoint()
-                        try:
-                            date = get_date(row[0].value)
-                        except Exception as e:
-                            raise RuntimeError('Invalid date: {0}'.format(row[0].value)) from e
+                # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
+                elif len(row) == 5 or len(row) == 7 or len(row) == 8:
+                    # Use transaction date, index 0
+                    try:
+                        date = get_date(row[0].value)
+                    except Exception as e:
+                        raise RuntimeError('Invalid date: {0}'.format(row[0].value)) from e
 
-                        # Skip booking date, index 1
+                    # Skip booking date, index 1
                         
-                        # Description (2)
-                        source_desc = row[2].value
+                    # Description (2)
+                    source_desc = row[2].value
 
-                        # Add place and country
-                        if len(row) >= 7:
-                            source_desc += ", {0} ({1})".format(row[3].value, row[4].value)
+                    # Add place and country
+                    if len(row) >= 7:
+                        source_desc += ", {0} ({1})".format(row[3].value, row[4].value)
 
-                        # Is there a price?
-                        price = None
-                        price_currency = None
-                        if len(row) == 8:
-                            price = D(str(row[-3].value))
-                            price_currency = row[-3].number_format[-4:-1]
+                    # Is there a price?
+                    price = None
+                    price_currency = None
+                    if len(row) == 8:
+                        price = D(str(row[-3].value))
+                        price_currency = row[-3].number_format[-4:-1]
                             
-                        # Skip amount in foreign currency
-                        number = D(str(row[-2].value))
-                        if number == ZERO:
-                            # Skip zero-dollar transactions.
-                            # Some banks produce these, e.g. for an annual fee that is waived.
-                            continue
+                    # Skip amount in foreign currency
+                    number = D(str(row[-2].value))
+                    if number == ZERO:
+                        # Skip zero-dollar transactions.
+                        # Some banks produce these, e.g. for an annual fee that is waived.
+                        continue
                         
-                        transaction_type = row[-1].value
-                        if transaction_type == 'Af':
-                            number = -number
-                            price = -price if price != None else None
-                        elif transaction_type != 'Bij':
-                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, row))
-                        
-                        entry = ICScardsEntry(account=account,
-                                              date=date,
-                                              source_desc=source_desc,
-                                              amount=Amount(number=number, currency='EUR'),
-                                              price=Amount(number=price, currency=price_currency) if price != None else None,
-                                              filename=filename,
-                                              line=line_i)
-                        if DEBUG:
-                            print(entry)
-                        entries.append(entry)
+                    transaction_type = row[-1].value
+                    if transaction_type == 'Af':
+                        number = -number
+                        price = -price if price != None else None
+                    elif transaction_type != 'Bij':
+                        raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, row))
+                    
+                    entry = ICScardsEntry(account=account,
+                                          date=date,
+                                          source_desc=source_desc,
+                                          amount=Amount(number=number, currency='EUR'),
+                                          price=Amount(number=price, currency=price_currency) if price != None else None,
+                                          filename=filename,
+                                          line=line_i)
+                    if DEBUG:
+                        print(entry)
+                    entries.append(entry)
 
         # No need to sort balances: there is just one
         entries.reverse()
@@ -333,10 +334,14 @@ def load_transactions(filename: str, currency: str = 'USD') -> [List[ICScardsEnt
         if DEBUG:
             print(entries)
             print(balances)
-        return entries, balances
 
     except Exception as e:
         raise RuntimeError('XLSX file has incorrect format', filename) from e
+    finally:
+        locale.setlocale(category=locale.LC_ALL, locale=current_locale)
+
+    return entries, balances
+
 
 def _get_key_from_posting(entry: Transaction, posting: Posting,
                           source_postings: List[Posting], source_desc: str,
