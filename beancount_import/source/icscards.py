@@ -397,11 +397,9 @@ def _make_import_result(icscards_entry: ICScardsEntry) -> ImportResult:
 class ICScardsSource(description_based_source.DescriptionBasedSource):
     def __init__(self,
                  filename: str,
-                 balances_directory: Optional[str] = None,
                  **kwargs) -> None:
         super().__init__(**kwargs)
         self.filename = filename
-        self.balances_directory = balances_directory
 
         # In these entries, account refers to the icscards_id, not the journal account.
         self.log_status('icscards: loading %s' % filename)
