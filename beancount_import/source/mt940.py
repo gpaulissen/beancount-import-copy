@@ -84,7 +84,7 @@ Within your Python script for invoking beancount_import, you might use an
 expression like the following to specify the MT940 source:
 
     dict(module='beancount_import.source.mt940',
-         directory=os.path.join(journal_dir, 'data', 'mt940', '<file>.940'),
+         filenames=[os.path.join(journal_dir, 'data', 'mt940', '<file>.940')],
          mt940_bank=ASNB
     )
 
@@ -275,15 +275,19 @@ def _make_import_result(mt940_entry: MT940Entry) -> ImportResult:
 
 class MT940Source(description_based_source.DescriptionBasedSource):
     def __init__(self,
-                 filename: str,
+                 filenames: List[str],
                  mt940_bank: Optional[str] = None,
                  **kwargs) -> None:
         super().__init__(**kwargs)
-        self.filename = filename
 
         # In these entries, account refers to the mt940_id, not the journal account.
-        self.log_status('mt940: loading %s' % filename)
-        self.mt940_entries, self.balances = load_transactions(filename, mt940_bank)
+        self.mt940_entries = []
+        self.balances = []
+        for filename in filenames:
+            self.log_status('mt940: loading %s' % filename)
+            mt940_entries, balances = load_transactions(filename, mt940_bank)
+            self.mt940_entries.extend(mt940_entries)
+            self.balances.extend(balances)
 
     def prepare(self, journal: JournalEditor, results: SourceResults) -> None:
         account_to_mt940_id, mt940_id_to_account = description_based_source.get_account_mapping(

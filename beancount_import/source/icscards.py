@@ -113,8 +113,9 @@ Within your Python script for invoking beancount_import, you might use an
 expression like the following to specify the icscards source:
 
     dict(module='beancount_import.source.icscards',
-         directory=os.path.join(journal_dir, 'data', 'icscards', 'account_id'),
-         assets_account='Assets:ICScards',
+         filenames=(
+             glob.glob(os.path.join(journal_dir, 'data/icscards/*/*.xlsx'))
+         ),
     )
 
 where `journal_dir` refers to the financial/ directory.
@@ -396,15 +397,20 @@ def _make_import_result(icscards_entry: ICScardsEntry) -> ImportResult:
 
 class ICScardsSource(description_based_source.DescriptionBasedSource):
     def __init__(self,
-                 filename: str,
+                 filenames: List[str],
                  **kwargs) -> None:
         super().__init__(**kwargs)
-        self.filename = filename
+        self.filenames = filenames
 
         # In these entries, account refers to the icscards_id, not the journal account.
-        self.log_status('icscards: loading %s' % filename)
         # Balances are in the same file
-        self.icscards_entries, self.balances = load_transactions(filename)
+        self.icscards_entries = []
+        self.balances = [] 
+        for filename in filenames:
+            self.log_status('icscards: loading %s' % filename)
+            icscards_entries, balances = load_transactions(filename)
+            self.icscards_entries.extend(icscards_entries)
+            self.balances.extend(balances)
 
     def prepare(self, journal: JournalEditor, results: SourceResults) -> None:
         account_to_icscards_id, icscards_id_to_account = description_based_source.get_account_mapping(

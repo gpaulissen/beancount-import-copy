@@ -22,7 +22,7 @@ def test_source(name: str, icscards_filename: str):
         example_dir=os.path.join(testdata_dir, name),
         source_spec={
             'module': 'beancount_import.source.icscards',
-            'filename': os.path.join(testdata_dir, icscards_filename),
+            'filenames': [os.path.join(testdata_dir, icscards_filename)],
         },
         replacements=[(testdata_dir, '<testdata>')])
 

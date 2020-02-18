@@ -19,7 +19,7 @@ def test_source(name: str, mt940_filename: str):
         example_dir=os.path.join(testdata_dir, name),
         source_spec={
             'module': 'beancount_import.source.mt940',
-            'filename': os.path.join(testdata_dir, mt940_filename),
+            'filenames': [os.path.join(testdata_dir, mt940_filename)],
             'mt940_bank': 'ASNB',
         },
         replacements=[(testdata_dir, '<testdata>')])
