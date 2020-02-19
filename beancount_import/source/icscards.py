@@ -144,6 +144,7 @@ import collections
 import re
 import os
 import locale
+import traceback
 
 from beancount.core.data import Transaction, Posting, Balance, EMPTY_SET
 from beancount.core.amount import Amount
@@ -303,9 +304,12 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                             # '235,01 EGP'
                             price = locale.atof(row[-3].value[0:-4])
                             price_currency = row[-3].value[-3:]
-                        else:
+                        elif isinstance(row[-3].value, str):
                             price = locale.atof(row[-3].value[0:-4])
                             price_currency = row[-3].value[-3:]                            
+                        elif isinstance(row[-3].value, float):
+                            price = row[-3].value
+                            price_currency = row[-3].number_format[-4:-1] # number_format == '0.00 [$USD]'
                         price = D(str(price)) # convert to str to keep just the last two decimals
                             
                     # Skip amount in foreign currency
@@ -344,7 +348,9 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
             print(balances)
 
     except Exception as e:
-        raise RuntimeError('XLSX file has incorrect format', filename) from e
+        backtrace = "".join(traceback.TracebackException.from_exception(e).format())
+        breakpoint()
+        raise RuntimeError(backtrace + "\nXLSX file has incorrect format", filename) from e
     finally:
         locale.setlocale(category=locale.LC_ALL, locale=current_locale)
 
