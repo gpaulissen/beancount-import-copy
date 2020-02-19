@@ -304,8 +304,8 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                             price = locale.atof(row[-3].value[0:-4])
                             price_currency = row[-3].value[-3:]
                         else:
-                            price = row[-3].value
-                            price_currency = row[-3].number_format[-4:-1]                            
+                            price = locale.atof(row[-3].value[0:-4])
+                            price_currency = row[-3].value[-3:]                            
                         price = D(str(price)) # convert to str to keep just the last two decimals
                             
                     # Skip amount in foreign currency
