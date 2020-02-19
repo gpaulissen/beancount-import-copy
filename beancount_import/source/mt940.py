@@ -111,12 +111,12 @@ transaction.
 Transaction identification
 --------------------------
 
-The `date` and `source_desc` metadata fields (along with the account and
+The `date` and `source_desc` metadata fields (along with the account, payee and
 amount) associate postings in the journal with corresponding rows in the
-transactions file.  These fields correspond to the "date" and "extra_details"
+transactions file.  These fields correspond to the "date" and "transaction_details"
 fields in the transactions file, respectively.  It is possible for multiple
 real transactions to have an identical combination of account, amount, "date",
-and "extra_details" (corresponding to multiple identical rows in the
+and "transaction_details" (corresponding to multiple identical rows in the
 transactions file), but that is handled appropriately: this data source will
 simply generate a separate transaction for each such row.
 
@@ -143,7 +143,7 @@ from ..journal_editor import JournalEditor
 # account may be either the mt940_id or the journal account name
 MT940Entry = collections.namedtuple(
     'MT940Entry',
-    ['account', 'date', 'amount', 'source_desc', 'filename', 'line'])
+    ['account', 'date', 'amount', 'payee', 'source_desc', 'filename', 'line'])
 RawBalance = collections.namedtuple(
     'RawBalance', ['account', 'date', 'amount', 'filename', 'line'])
 
@@ -154,9 +154,6 @@ def get_info(raw_entry: Union[MT940Entry, RawBalance]) -> dict:
         filename=raw_entry.filename,
         line=raw_entry.line,
     )
-
-
-mt940_date_format = '%m/%d/%Y'
 
 
 def load_transactions(filename: str, mt940_bank: str, currency: str = 'EUR') -> [List[MT940Entry], List[RawBalance]]:
@@ -212,12 +209,17 @@ def load_transactions(filename: str, mt940_bank: str, currency: str = 'EUR') -> 
                     # Some banks produce these, e.g. for an annual fee that is waived.
                     continue
                 currency = transaction.data['amount'].currency
-                source_desc = transaction.data['extra_details']
+                payee = transaction.data['customer_reference']
+                source_desc = transaction.data['transaction_details']
+                source_desc = source_desc.replace(transaction.data['customer_reference'], '')
+                source_desc = source_desc.replace(transaction.data['extra_details'], '')
+                source_desc = source_desc.replace("\n", '').strip()
                 source_desc = source_desc if source_desc != '' else 'UNKNOWN'
                 entries.append(
                     MT940Entry(
                         account=account,
                         date=transaction.data['date'],
+                        payee=payee,
                         source_desc=source_desc,
                         amount=Amount(number=number, currency=currency),
                         filename=filename,
@@ -233,11 +235,11 @@ def _get_key_from_posting(entry: Transaction, posting: Posting,
                           posting_date: datetime.date):
     del entry
     del source_postings
-    return (posting.account, posting_date, posting.units, source_desc)
+    return (posting.account, posting_date, posting.units, source_desc, entry.payee)
 
 
 def _get_key_from_entry(x: MT940Entry):
-    return (x.account, x.date, x.amount, x.source_desc)
+    return (x.account, x.date, x.amount, x.source_desc, x.payee)
 
 
 def _make_import_result(mt940_entry: MT940Entry) -> ImportResult:
@@ -245,7 +247,7 @@ def _make_import_result(mt940_entry: MT940Entry) -> ImportResult:
         meta=None,
         date=mt940_entry.date,
         flag=FLAG_OKAY,
-        payee=None,
+        payee=mt940_entry.payee,
         narration=mt940_entry.source_desc,
         tags=EMPTY_SET,
         links=EMPTY_SET,

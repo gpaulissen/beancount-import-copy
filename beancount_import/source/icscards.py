@@ -155,7 +155,7 @@ from . import ImportResult, SourceResults
 from ..matching import FIXME_ACCOUNT
 from ..journal_editor import JournalEditor
 
-DEBUG = True
+DEBUG = False
 
 def convert_str_to_list(str, max_items, sep=r'\s\s+|\t|\n'):
     return [x for x in re.split(sep, str)[0:max_items]]
