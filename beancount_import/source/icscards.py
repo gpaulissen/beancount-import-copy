@@ -103,8 +103,8 @@ total.
 
 The payments from your ICScards are in line 9 till 28 where lines 20 and 26 are
 just information about currency conversions. Please note that line 25 contains
-a price in USD although the CSV does not show it (but the XLSX does).  The
-number of columns is 7 or 8 dependening on whether the price is included.
+a total cost in USD although the CSV does not show it (but the XLSX does).  The
+number of columns is 7 or 8 dependening on whether the cost is included.
 
 Specifying the source to beancount_import
 =========================================
@@ -167,7 +167,7 @@ def convert_str_to_id_list(str, max_items, sep=r'\s\s+|\t|\n'):
 # account may be either the icscards_id or the journal account name
 ICScardsEntry = collections.namedtuple(
     'ICScardsEntry',
-    ['account', 'date', 'amount', 'price', 'source_desc', 'filename', 'line'])
+    ['account', 'date', 'amount', 'cost', 'source_desc', 'filename', 'line'])
 RawBalance = collections.namedtuple(
     'RawBalance', ['account', 'date', 'amount', 'filename', 'line'])
 
@@ -257,18 +257,18 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     if sheet_i == 1:
                         cols = convert_str_to_list(row[0].value, 12)
                         balance_names_actual = cols[0:4]
-                        number, transaction_type = cols[-2:]
-                        # number something like € 1.827,97
-                        number = D(number[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+                        amount, transaction_type = cols[-2:]
+                        # amount something like € 1.827,97
+                        amount = D(amount[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
                         if transaction_type == 'Af':
-                            number = -number
+                            amount = -amount
                         elif transaction_type != 'Bij':
                             raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
                         balances.append(
                             RawBalance(
                                 account=account,
                                 date=page_date,
-                                amount=Amount(number=number, currency='EUR'),
+                                amount=Amount(number=amount, currency='EUR'),
                                 filename=filename,
                                 line=((sheet_i-1)*100)+line_i))
                     else:
@@ -296,41 +296,52 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     if len(row) >= 7:
                         source_desc += ", {0} ({1})".format(row[3].value, row[4].value)
 
-                    # Is there a price?
-                    price = None
-                    price_currency = None
+                    # Is there a foreign currency or not (column -3 for 8 columns)?
+                    base_amount = None
+                    base_currency = 'EUR'
+                    foreign_amount = None
+                    foreign_currency = None
                     if len(row) == 8:
                         if row[-3].number_format == 'General':
                             # '235,01 EGP'
-                            price = locale.atof(row[-3].value[0:-4])
-                            price_currency = row[-3].value[-3:]
+                            foreign_amount = locale.atof(row[-3].value[0:-4])
+                            foreign_currency = row[-3].value[-3:]
                         elif isinstance(row[-3].value, str):
-                            price = locale.atof(row[-3].value[0:-4])
-                            price_currency = row[-3].value[-3:]                            
+                            foreign_amount = locale.atof(row[-3].value[0:-4])
+                            foreign_currency = row[-3].value[-3:]                            
                         elif isinstance(row[-3].value, float):
-                            price = row[-3].value
-                            price_currency = row[-3].number_format[-4:-1] # number_format == '0.00 [$USD]'
-                        price = D(str(price)) # convert to str to keep just the last two decimals
-                            
+                            foreign_amount = row[-3].value
+                            foreign_currency = row[-3].number_format[-4:-1] # number_format == '0.00 [$USD]'
+                        foreign_amount = D(str(foreign_amount)) # convert to str to keep just the last two decimals
+
                     # Skip amount in foreign currency
-                    number = D(str(row[-2].value))
-                    if number == ZERO:
+                    base_amount = D(str(row[-2].value))
+                    if base_amount == ZERO:
                         # Skip zero-dollar transactions.
                         # Some banks produce these, e.g. for an annual fee that is waived.
                         continue
                         
                     transaction_type = row[-1].value
+                    sign = 1
                     if transaction_type == 'Af':
-                        number = -number
-                        price = -price if price != None else None
+                        sign = -1
                     elif transaction_type != 'Bij':
                         raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, row))
-                    
+
+                    # In beancount we make a transaction in the foreign currency and have a cost in EUR.
+                    # Cost is always positive.
+                    if False: # forget about cost right now
+                        amount=Amount(number=sign * foreign_amount, currency=foreign_currency)
+                        cost=Amount(number=base_amount, currency=base_currency)
+                    else:
+                        amount=Amount(number=sign * base_amount, currency=base_currency)
+                        cost=None
+                        
                     entry = ICScardsEntry(account=account,
                                           date=date,
                                           source_desc=source_desc,
-                                          amount=Amount(number=number, currency='EUR'),
-                                          price=Amount(number=price, currency=price_currency) if price != None else None,
+                                          amount=amount,
+                                          cost=cost,
                                           filename=filename,
                                           line=((sheet_i-1)*100)+line_i)
                     if DEBUG:
@@ -382,8 +393,8 @@ def _make_import_result(icscards_entry: ICScardsEntry) -> ImportResult:
             Posting(
                 account=icscards_entry.account,
                 units=icscards_entry.amount,
-                cost=None,
-                price=icscards_entry.price,
+                cost=icscards_entry.cost,
+                price=None,
                 flag=None,
                 meta=collections.OrderedDict(
                     source_desc=icscards_entry.source_desc,

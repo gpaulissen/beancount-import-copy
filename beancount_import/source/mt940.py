@@ -235,11 +235,11 @@ def _get_key_from_posting(entry: Transaction, posting: Posting,
                           posting_date: datetime.date):
     del entry
     del source_postings
-    return (posting.account, posting_date, posting.units, source_desc, entry.payee)
+    return (posting.account, posting_date, posting.units, source_desc)
 
 
 def _get_key_from_entry(x: MT940Entry):
-    return (x.account, x.date, x.amount, x.source_desc, x.payee)
+    return (x.account, x.date, x.amount, x.source_desc)
 
 
 def _make_import_result(mt940_entry: MT940Entry) -> ImportResult:

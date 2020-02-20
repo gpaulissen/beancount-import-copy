@@ -50,7 +50,7 @@
 ;             }
 ;           ]
 2018-12-22 * "SSP EGYPT, CAIRO E. -07C (EG)"
-  Liabilities:Credit-Card  -11.82 EUR @ -235.01 EGP
+  Liabilities:Credit-Card  -11.82 EUR
     date: 2018-12-22
     source_desc: "SSP EGYPT, CAIRO E. -07C (EG)"
   Expenses:FIXME            11.82 EUR
@@ -88,7 +88,7 @@
 ;             }
 ;           ]
 2018-12-23 * "V A WATERFRONT, WATERFRONT (ZA)"
-  Liabilities:Credit-Card  -0.62 EUR @ -10.0 ZAR
+  Liabilities:Credit-Card  -0.62 EUR
     date: 2018-12-23
     source_desc: "V A WATERFRONT, WATERFRONT (ZA)"
   Expenses:FIXME            0.62 EUR
@@ -107,7 +107,7 @@
 ;             }
 ;           ]
 2018-12-23 * "Avis Rent A Car, JOHANNESBURG (ZA)"
-  Liabilities:Credit-Card  -26.32 EUR @ -419.61 ZAR
+  Liabilities:Credit-Card  -26.32 EUR
     date: 2018-12-23
     source_desc: "Avis Rent A Car, JOHANNESBURG (ZA)"
   Expenses:FIXME            26.32 EUR
@@ -145,7 +145,7 @@
 ;             }
 ;           ]
 2018-12-24 * "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
-  Liabilities:Credit-Card  -14.09 EUR @ -227.3 ZAR
+  Liabilities:Credit-Card  -14.09 EUR
     date: 2018-12-24
     source_desc: "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
   Expenses:FIXME            14.09 EUR
@@ -164,7 +164,7 @@
 ;             }
 ;           ]
 2018-12-24 * "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-  Liabilities:Credit-Card  -89.25 EUR @ -1440.0 ZAR
+  Liabilities:Credit-Card  -89.25 EUR
     date: 2018-12-24
     source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
   Expenses:FIXME            89.25 EUR
@@ -183,7 +183,7 @@
 ;             }
 ;           ]
 2018-12-24 * "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-  Liabilities:Credit-Card  -26.65 EUR @ -430.0 ZAR
+  Liabilities:Credit-Card  -26.65 EUR
     date: 2018-12-24
     source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
   Expenses:FIXME            26.65 EUR
@@ -202,7 +202,7 @@
 ;             }
 ;           ]
 2018-12-24 * "AMBERG GUEST FARM, PAARL (ZA)"
-  Liabilities:Credit-Card  -140.22 EUR @ -2250.0 ZAR
+  Liabilities:Credit-Card  -140.22 EUR
     date: 2018-12-24
     source_desc: "AMBERG GUEST FARM, PAARL (ZA)"
   Expenses:FIXME            140.22 EUR
@@ -240,7 +240,7 @@
 ;             }
 ;           ]
 2018-12-24 * "V A WATERFRONT, WATERFRONT (ZA)"
-  Liabilities:Credit-Card  -1.24 EUR @ -20.0 ZAR
+  Liabilities:Credit-Card  -1.24 EUR
     date: 2018-12-24
     source_desc: "V A WATERFRONT, WATERFRONT (ZA)"
   Expenses:FIXME            1.24 EUR
@@ -259,7 +259,7 @@
 ;             }
 ;           ]
 2018-12-24 * "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
-  Liabilities:Credit-Card  -52.97 EUR @ -850.0 ZAR
+  Liabilities:Credit-Card  -52.97 EUR
     date: 2018-12-24
     source_desc: "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
   Expenses:FIXME            52.97 EUR
@@ -278,7 +278,7 @@
 ;             }
 ;           ]
 2018-12-24 * "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
-  Liabilities:Credit-Card  -8.72 EUR @ -140.0 ZAR
+  Liabilities:Credit-Card  -8.72 EUR
     date: 2018-12-24
     source_desc: "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
   Expenses:FIXME            8.72 EUR
@@ -297,7 +297,7 @@
 ;             }
 ;           ]
 2018-12-25 * "Mountain Magic Gard, Cape Town (ZA)"
-  Liabilities:Credit-Card  -172.36 EUR @ -2781.0 ZAR
+  Liabilities:Credit-Card  -172.36 EUR
     date: 2018-12-25
     source_desc: "Mountain Magic Gard, Cape Town (ZA)"
   Expenses:FIXME            172.36 EUR
@@ -335,7 +335,7 @@
 ;             }
 ;           ]
 2018-12-25 * "BRASS BELL RESTAURANT, KALK BAY (ZA)"
-  Liabilities:Credit-Card  -32.72 EUR @ -525.0 ZAR
+  Liabilities:Credit-Card  -32.72 EUR
     date: 2018-12-25
     source_desc: "BRASS BELL RESTAURANT, KALK BAY (ZA)"
   Expenses:FIXME            32.72 EUR
@@ -354,7 +354,7 @@
 ;             }
 ;           ]
 2018-12-25 * "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
-  Liabilities:Credit-Card  -15.58 EUR @ -250.0 ZAR
+  Liabilities:Credit-Card  -15.58 EUR
     date: 2018-12-25
     source_desc: "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
   Expenses:FIXME            15.58 EUR
@@ -373,7 +373,7 @@
 ;             }
 ;           ]
 2018-12-25 * "THE MUIZE BNB, MUIZENBERG (ZA)"
-  Liabilities:Credit-Card  -77.9 EUR @ -1250.0 ZAR
+  Liabilities:Credit-Card  -77.9 EUR
     date: 2018-12-25
     source_desc: "THE MUIZE BNB, MUIZENBERG (ZA)"
   Expenses:FIXME            77.9 EUR
@@ -392,7 +392,7 @@
 ;             }
 ;           ]
 2018-12-26 * "JONKERSHUIS CONSTA79002, CONSTANTIA (ZA)"
-  Liabilities:Credit-Card  -26.01 EUR @ -420.0 ZAR
+  Liabilities:Credit-Card  -26.01 EUR
     date: 2018-12-26
     source_desc: "JONKERSHUIS CONSTA79002, CONSTANTIA (ZA)"
   Expenses:FIXME            26.01 EUR
@@ -411,7 +411,7 @@
 ;             }
 ;           ]
 2018-12-26 * "GROOT CONSTANTIA, CONSTANTIA (ZA)"
-  Liabilities:Credit-Card  -14.65 EUR @ -235.0 ZAR
+  Liabilities:Credit-Card  -14.65 EUR
     date: 2018-12-26
     source_desc: "GROOT CONSTANTIA, CONSTANTIA (ZA)"
   Expenses:FIXME            14.65 EUR
@@ -430,7 +430,7 @@
 ;             }
 ;           ]
 2018-12-26 * "GROOT CONSTANTIA, CONSTANTIA (ZA)"
-  Liabilities:Credit-Card  -13.09 EUR @ -210.0 ZAR
+  Liabilities:Credit-Card  -13.09 EUR
     date: 2018-12-26
     source_desc: "GROOT CONSTANTIA, CONSTANTIA (ZA)"
   Expenses:FIXME            13.09 EUR
@@ -449,7 +449,7 @@
 ;             }
 ;           ]
 2018-12-27 * "AMBERG ART AND KITCHEN, PAARL (ZA)"
-  Liabilities:Credit-Card  -34.27 EUR @ -550.0 ZAR
+  Liabilities:Credit-Card  -34.27 EUR
     date: 2018-12-27
     source_desc: "AMBERG ART AND KITCHEN, PAARL (ZA)"
   Expenses:FIXME            34.27 EUR
@@ -487,7 +487,7 @@
 ;             }
 ;           ]
 2018-12-27 * "THELAB LIFESTYLE CAPE TO, HOUTBAY (ZA)"
-  Liabilities:Credit-Card  -24.26 EUR @ -390.0 ZAR
+  Liabilities:Credit-Card  -24.26 EUR
     date: 2018-12-27
     source_desc: "THELAB LIFESTYLE CAPE TO, HOUTBAY (ZA)"
   Expenses:FIXME            24.26 EUR
@@ -525,7 +525,7 @@
 ;             }
 ;           ]
 2018-12-30 * "AMBERG ART AND KITCHEN, PAARL (ZA)"
-  Liabilities:Credit-Card  -14.31 EUR @ -230.0 ZAR
+  Liabilities:Credit-Card  -14.31 EUR
     date: 2018-12-30
     source_desc: "AMBERG ART AND KITCHEN, PAARL (ZA)"
   Expenses:FIXME            14.31 EUR
@@ -544,7 +544,7 @@
 ;             }
 ;           ]
 2018-12-30 * "HERMANUS GOLF CLUB, HERMANUS (ZA)"
-  Liabilities:Credit-Card  -14.93 EUR @ -240.0 ZAR
+  Liabilities:Credit-Card  -14.93 EUR
     date: 2018-12-30
     source_desc: "HERMANUS GOLF CLUB, HERMANUS (ZA)"
   Expenses:FIXME            14.93 EUR
@@ -563,7 +563,7 @@
 ;             }
 ;           ]
 2018-12-30 * "SHELL HERMANUS, HERMANUS (ZA)"
-  Liabilities:Credit-Card  -30.68 EUR @ -493.1 ZAR
+  Liabilities:Credit-Card  -30.68 EUR
     date: 2018-12-30
     source_desc: "SHELL HERMANUS, HERMANUS (ZA)"
   Expenses:FIXME            30.68 EUR
@@ -582,7 +582,7 @@
 ;             }
 ;           ]
 2018-12-30 * "AMBERG GUEST FARM, PAARL (ZA)"
-  Liabilities:Credit-Card  -140.01 EUR @ -2250.0 ZAR
+  Liabilities:Credit-Card  -140.01 EUR
     date: 2018-12-30
     source_desc: "AMBERG GUEST FARM, PAARL (ZA)"
   Expenses:FIXME            140.01 EUR
@@ -601,7 +601,7 @@
 ;             }
 ;           ]
 2018-12-31 * "BALMORAL LODGE, DURBANVILLE H (ZA)"
-  Liabilities:Credit-Card  -62.49 EUR @ -1000.0 ZAR
+  Liabilities:Credit-Card  -62.49 EUR
     date: 2018-12-31
     source_desc: "BALMORAL LODGE, DURBANVILLE H (ZA)"
   Expenses:FIXME            62.49 EUR
@@ -639,7 +639,7 @@
 ;             }
 ;           ]
 2019-01-04 * "JACKSONS INTERNATIONAL, KEMPTON PARK (ZA)"
-  Liabilities:Credit-Card  -17.97 EUR @ -280.0 ZAR
+  Liabilities:Credit-Card  -17.97 EUR
     date: 2019-01-04
     source_desc: "JACKSONS INTERNATIONAL, KEMPTON PARK (ZA)"
   Expenses:FIXME            17.97 EUR
@@ -658,7 +658,7 @@
 ;             }
 ;           ]
 2019-01-04 * "Bakubung Kubu Lodge, PILANESBURG (ZA)"
-  Liabilities:Credit-Card  -52.62 EUR @ -820.0 ZAR
+  Liabilities:Credit-Card  -52.62 EUR
     date: 2019-01-04
     source_desc: "Bakubung Kubu Lodge, PILANESBURG (ZA)"
   Expenses:FIXME            52.62 EUR
