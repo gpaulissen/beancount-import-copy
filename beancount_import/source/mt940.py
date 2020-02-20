@@ -209,7 +209,9 @@ def load_transactions(filename: str, mt940_bank: str, currency: str = 'EUR') -> 
                     # Some banks produce these, e.g. for an annual fee that is waived.
                     continue
                 currency = transaction.data['amount'].currency
-                payee = "{1} ({0})".format(transaction.data['customer_reference'], transaction.data['extra_details'])
+                payee = None
+                if transaction.data['customer_reference'] != '' and transaction.data['extra_details'] != '':
+                    payee = "{1} ({0})".format(transaction.data['customer_reference'], transaction.data['extra_details'])
                 source_desc = transaction.data['transaction_details']
                 source_desc = source_desc.replace(transaction.data['customer_reference'], '')
                 source_desc = source_desc.replace(transaction.data['extra_details'], '')

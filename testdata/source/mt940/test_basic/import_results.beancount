@@ -68,7 +68,7 @@
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2020-01-25 * " ()" "Kosten gebruik betaalrekening inclusief 1 betaalpas"
+2020-01-25 * "Kosten gebruik betaalrekening inclusief 1 betaalpas"
   Liabilities:Credit-Card  -1.65 EUR
     date: 2020-01-25
     source_desc: "Kosten gebruik betaalrekening inclusief 1 betaalpas"
