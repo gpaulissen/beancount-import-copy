@@ -167,7 +167,7 @@ def convert_str_to_id_list(str, max_items, sep=r'\s\s+|\t|\n'):
 # account may be either the icscards_id or the journal account name
 ICScardsEntry = collections.namedtuple(
     'ICScardsEntry',
-    ['account', 'date', 'amount', 'cost', 'source_desc', 'filename', 'line'])
+    ['account', 'date', 'amount', 'cost', 'payee', 'narration', 'source_desc', 'filename', 'line'])
 RawBalance = collections.namedtuple(
     'RawBalance', ['account', 'date', 'amount', 'filename', 'line'])
 
@@ -289,12 +289,21 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
 
                     # Skip booking date, index 1
                         
-                    # Description (2)
-                    source_desc = row[2].value
+                    payee = None
+                    narration = None
+                    source_desc = None
 
                     # Add place and country
                     if len(row) >= 7:
-                        source_desc += ", {0} ({1})".format(row[3].value, row[4].value)
+                        # payee (2)
+                        payee = row[2].value
+                        # place (3) and country (4)
+                        narration = "{0} ({1})".format(row[3].value, row[4].value)
+                        source_desc = "{0}, {1}".format(payee, narration)
+                    else:
+                        # description (2)
+                        narration = row[2].value
+                        source_desc = narration
 
                     # Is there a foreign currency or not (column -3 for 8 columns)?
                     base_amount = None
@@ -339,6 +348,8 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                         
                     entry = ICScardsEntry(account=account,
                                           date=date,
+                                          payee=payee,
+                                          narration=narration,
                                           source_desc=source_desc,
                                           amount=amount,
                                           cost=cost,
@@ -385,8 +396,8 @@ def _make_import_result(icscards_entry: ICScardsEntry) -> ImportResult:
         meta=None,
         date=icscards_entry.date,
         flag=FLAG_OKAY,
-        payee=None,
-        narration=icscards_entry.source_desc,
+        payee=icscards_entry.payee,
+        narration=icscards_entry.narration,
         tags=EMPTY_SET,
         links=EMPTY_SET,
         postings=[

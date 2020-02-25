@@ -111,7 +111,7 @@ transaction.
 Transaction identification
 --------------------------
 
-The `date` and `source_desc` metadata fields (along with the account, payee and
+The `date` and `source_desc` metadata fields (along with the account and
 amount) associate postings in the journal with corresponding rows in the
 transactions file.  These fields correspond to the "date" and "transaction_details"
 fields in the transactions file, respectively.  It is possible for multiple
@@ -143,7 +143,7 @@ from ..journal_editor import JournalEditor
 # account may be either the mt940_id or the journal account name
 MT940Entry = collections.namedtuple(
     'MT940Entry',
-    ['account', 'date', 'amount', 'payee', 'source_desc', 'filename', 'line'])
+    ['account', 'date', 'amount', 'payee', 'narration', 'source_desc', 'filename', 'line'])
 RawBalance = collections.namedtuple(
     'RawBalance', ['account', 'date', 'amount', 'filename', 'line'])
 
@@ -209,19 +209,23 @@ def load_transactions(filename: str, mt940_bank: str, currency: str = 'EUR') -> 
                     # Some banks produce these, e.g. for an annual fee that is waived.
                     continue
                 currency = transaction.data['amount'].currency
+                narration = transaction.data['transaction_details']
+                narration = narration.replace("\n", '')
+                narration = narration.replace(transaction.data['customer_reference'], '')
+                narration = narration.replace(transaction.data['extra_details'], '').strip()
+                narration = narration if narration != '' else 'UNKNOWN'
                 payee = None
                 if transaction.data['customer_reference'] != '' and transaction.data['extra_details'] != '':
                     payee = "{1} ({0})".format(transaction.data['customer_reference'], transaction.data['extra_details'])
-                source_desc = transaction.data['transaction_details']
-                source_desc = source_desc.replace(transaction.data['customer_reference'], '')
-                source_desc = source_desc.replace(transaction.data['extra_details'], '')
-                source_desc = source_desc.replace("\n", '').strip()
-                source_desc = source_desc if source_desc != '' else 'UNKNOWN'
+                    source_desc = "{0}, {1}".format(payee, narration)
+                else:
+                    source_desc = narration
                 entries.append(
                     MT940Entry(
                         account=account,
                         date=transaction.data['date'],
                         payee=payee,
+                        narration=narration,
                         source_desc=source_desc,
                         amount=Amount(number=number, currency=currency),
                         filename=filename,
@@ -250,7 +254,7 @@ def _make_import_result(mt940_entry: MT940Entry) -> ImportResult:
         date=mt940_entry.date,
         flag=FLAG_OKAY,
         payee=mt940_entry.payee,
-        narration=mt940_entry.source_desc,
+        narration=mt940_entry.narration,
         tags=EMPTY_SET,
         links=EMPTY_SET,
         postings=[

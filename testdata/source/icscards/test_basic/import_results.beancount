@@ -11,7 +11,7 @@
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-10-10 * "Starbucks, STARBUCKS STORE 12345 (US)"
+2019-10-10 * "Starbucks" "STARBUCKS STORE 12345 (US)"
   Liabilities:Credit-Card  -2.45 EUR
     date: 2019-10-10
     source_desc: "Starbucks, STARBUCKS STORE 12345 (US)"
