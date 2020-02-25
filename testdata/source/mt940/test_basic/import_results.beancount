@@ -82,15 +82,15 @@
 ;               "amount": "828.72 EUR",
 ;               "date": "2020-01-29",
 ;               "key_value_pairs": {
-;                 "desc": "transfer solutions bv (NL25INGB9999999999), 2020-01-28T14:32:46-000000000000089--Transfer Solutions BV-DIVIDEND 28/01/2020"
+;                 "desc": "transfer solutions bv (NL25INGB9999999999), 2020-01-28T14:32:46-000000000000089-NL25INGB9999999999-Transfer Solutions BV-DIVIDEND 28/01/2020"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2020-01-29 * "transfer solutions bv (NL25INGB9999999999)" "2020-01-28T14:32:46-000000000000089--Transfer Solutions BV-DIVIDEND 28/01/2020"
+2020-01-29 * "transfer solutions bv (NL25INGB9999999999)" "2020-01-28T14:32:46-000000000000089-NL25INGB9999999999-Transfer Solutions BV-DIVIDEND 28/01/2020"
   Liabilities:Credit-Card   828.72 EUR
     date: 2020-01-29
-    source_desc: "transfer solutions bv (NL25INGB9999999999), 2020-01-28T14:32:46-000000000000089--Transfer Solutions BV-DIVIDEND 28/01/2020"
+    source_desc: "transfer solutions bv (NL25INGB9999999999), 2020-01-28T14:32:46-000000000000089-NL25INGB9999999999-Transfer Solutions BV-DIVIDEND 28/01/2020"
   Expenses:FIXME           -828.72 EUR
 
 ;; date: 2020-01-29

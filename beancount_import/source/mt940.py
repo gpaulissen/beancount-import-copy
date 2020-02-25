@@ -211,8 +211,8 @@ def load_transactions(filename: str, mt940_bank: str, currency: str = 'EUR') -> 
                 currency = transaction.data['amount'].currency
                 narration = transaction.data['transaction_details']
                 narration = narration.replace("\n", '')
-                narration = narration.replace(transaction.data['customer_reference'], '')
-                narration = narration.replace(transaction.data['extra_details'], '').strip()
+                narration = narration.replace(transaction.data['customer_reference'], '', 1) # replace just once
+                narration = narration.replace(transaction.data['extra_details'], '', 1).strip() # replace just once
                 narration = narration if narration != '' else 'UNKNOWN'
                 payee = None
                 if transaction.data['customer_reference'] != '' and transaction.data['extra_details'] != '':
