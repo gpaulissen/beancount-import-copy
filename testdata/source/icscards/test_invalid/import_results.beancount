@@ -1,4 +1,42 @@
-;; date: 2019-12-18
+;; date: 2019-10-12
+;; info: {"filename": "<testdata>/icscards.xlsx", "line": 8, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-2.45 EUR",
+;               "date": "2019-10-12",
+;               "key_value_pairs": {
+;                 "desc": "Starbucks, STARBUCKS STORE 12345 (US)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-10-12 * "Starbucks" "STARBUCKS STORE 12345 (US)"
+  Liabilities:Credit-Card  -2.45 EUR
+    date: 2019-10-12
+    source_desc: "Starbucks, STARBUCKS STORE 12345 (US)"
+  Expenses:FIXME            2.45 EUR
+
+;; date: 2019-11-28
+;; info: {"filename": "<testdata>/icscards.xlsx", "line": 6, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "66.88 EUR",
+;               "date": "2019-11-28",
+;               "key_value_pairs": {
+;                 "desc": "IDEAL BETALING, DANK U"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-11-28 * "IDEAL BETALING, DANK U"
+  Liabilities:Credit-Card   66.88 EUR
+    date: 2019-11-28
+    source_desc: "IDEAL BETALING, DANK U"
+  Expenses:FIXME           -66.88 EUR
+
+;; date: 2019-12-17
 ;; info: {"filename": "<testdata>/icscards.xlsx", "line": 4, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
-2019-12-18 balance Liabilities:Credit-Card                         -1737.12 EUR
+2019-12-17 balance Liabilities:Credit-Card                         -1737.12 EUR

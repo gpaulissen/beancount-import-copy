@@ -128,11 +128,7 @@ transaction of the following form is generated:
 
     2017-09-06 * "Sally Smith" "Rent"
       Assets:ICScards     1150.00 USD
-        date: 2017-09-06
-        icscards_description: "Rent"
-        icscards_payer: "Sally Smith"
-        icscards_payment_id: "0454063333607815882"
-        icscards_type: "Payment"
+        source_desc: "Rent"
       Expenses:FIXME  -1150.00 USD
 
 """
@@ -281,13 +277,15 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     assert balance_names_actual == balance_names, print("Actual: {0}; Expected: {1}".format(balance_names_actual, balance_names))
                 # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
                 elif len(row) == 5 or len(row) == 7 or len(row) == 8:
-                    # Use transaction date, index 0
+                    # GJP 2020-03-01
+                    # Skip transaction date (index 0) since it gives a wrong balance.
+                    # Use booking date (index 1) in order to get a correct balance.
+                    
+                    date = row[1].value
                     try:
-                        date = get_date(row[0].value)
+                        date = get_date(date)
                     except Exception as e:
-                        raise RuntimeError('Invalid date: {0}'.format(row[0].value)) from e
-
-                    # Skip booking date, index 1
+                        raise RuntimeError('Invalid date: {0}'.format(date)) from e
                         
                     payee = None
                     narration = None
@@ -469,7 +467,12 @@ class ICScardsSource(description_based_source.DescriptionBasedSource):
                 (icscards_account, ))
 
         for raw_balance in get_converted_icscards_entries(self.balances):
-            date = raw_balance.date + datetime.timedelta(days=1)
+            # GJP 2020-03-01
+            # The balance is correct till (excluding) this ICScards date,
+            # so it is the beancount definition (at 00:00:00)
+            
+            # date = raw_balance.date + datetime.timedelta(days=1)
+            date = raw_balance.date
             results.add_pending_entry(
                 ImportResult(
                     date=date,

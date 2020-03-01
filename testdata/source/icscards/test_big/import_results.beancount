@@ -1,59 +1,40 @@
-;; date: 2018-12-20
+;; date: 2018-12-21
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 10, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-7.99 EUR",
-;               "date": "2018-12-20",
+;               "date": "2018-12-21",
 ;               "key_value_pairs": {
 ;                 "desc": "NETFLIX.COM, 000-111-2222 (NL)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-20 * "NETFLIX.COM" "000-111-2222 (NL)"
+2018-12-21 * "NETFLIX.COM" "000-111-2222 (NL)"
   Liabilities:Credit-Card  -7.99 EUR
-    date: 2018-12-20
+    date: 2018-12-21
     source_desc: "NETFLIX.COM, 000-111-2222 (NL)"
   Expenses:FIXME            7.99 EUR
 
-;; date: 2018-12-21
+;; date: 2018-12-22
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 11, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-89.9 EUR",
-;               "date": "2018-12-21",
+;               "date": "2018-12-22",
 ;               "key_value_pairs": {
 ;                 "desc": "Tractive, Pasching (AT)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-21 * "Tractive" "Pasching (AT)"
+2018-12-22 * "Tractive" "Pasching (AT)"
   Liabilities:Credit-Card  -89.9 EUR
-    date: 2018-12-21
+    date: 2018-12-22
     source_desc: "Tractive, Pasching (AT)"
   Expenses:FIXME            89.9 EUR
-
-;; date: 2018-12-22
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 12, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-11.82 EUR",
-;               "date": "2018-12-22",
-;               "key_value_pairs": {
-;                 "desc": "SSP EGYPT, CAIRO E. -07C (EG)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-22 * "SSP EGYPT" "CAIRO E. -07C (EG)"
-  Liabilities:Credit-Card  -11.82 EUR
-    date: 2018-12-22
-    source_desc: "SSP EGYPT, CAIRO E. -07C (EG)"
-  Expenses:FIXME            11.82 EUR
 
 ;; date: 2018-12-23
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 6, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
@@ -73,44 +54,6 @@
     date: 2018-12-23
     source_desc: "IDEAL BETALING, DANK U"
   Expenses:FIXME           -500 EUR
-
-;; date: 2018-12-23
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 14, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-0.62 EUR",
-;               "date": "2018-12-23",
-;               "key_value_pairs": {
-;                 "desc": "V A WATERFRONT, WATERFRONT (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-23 * "V A WATERFRONT" "WATERFRONT (ZA)"
-  Liabilities:Credit-Card  -0.62 EUR
-    date: 2018-12-23
-    source_desc: "V A WATERFRONT, WATERFRONT (ZA)"
-  Expenses:FIXME            0.62 EUR
-
-;; date: 2018-12-23
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 16, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-26.32 EUR",
-;               "date": "2018-12-23",
-;               "key_value_pairs": {
-;                 "desc": "Avis Rent A Car, JOHANNESBURG (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-23 * "Avis Rent A Car" "JOHANNESBURG (ZA)"
-  Liabilities:Credit-Card  -26.32 EUR
-    date: 2018-12-23
-    source_desc: "Avis Rent A Car, JOHANNESBURG (ZA)"
-  Expenses:FIXME            26.32 EUR
 
 ;; date: 2018-12-24
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 7, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
@@ -132,363 +75,401 @@
   Expenses:FIXME           -500 EUR
 
 ;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 18, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 12, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
-;               "amount": "-14.09 EUR",
+;               "amount": "-11.82 EUR",
 ;               "date": "2018-12-24",
 ;               "key_value_pairs": {
-;                 "desc": "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
+;                 "desc": "SSP EGYPT, CAIRO E. -07C (EG)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-24 * "KLOOFNEK GROCER   82817" "TAMBOERSKLOO (ZA)"
-  Liabilities:Credit-Card  -14.09 EUR
+2018-12-24 * "SSP EGYPT" "CAIRO E. -07C (EG)"
+  Liabilities:Credit-Card  -11.82 EUR
     date: 2018-12-24
-    source_desc: "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
-  Expenses:FIXME            14.09 EUR
+    source_desc: "SSP EGYPT, CAIRO E. -07C (EG)"
+  Expenses:FIXME            11.82 EUR
 
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 20, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; date: 2018-12-25
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 14, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
-;               "amount": "-89.25 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "NATURAL WORLD" "KIRSTENBOSCH (ZA)"
-  Liabilities:Credit-Card  -89.25 EUR
-    date: 2018-12-24
-    source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-  Expenses:FIXME            89.25 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 22, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-26.65 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "NATURAL WORLD" "KIRSTENBOSCH (ZA)"
-  Liabilities:Credit-Card  -26.65 EUR
-    date: 2018-12-24
-    source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
-  Expenses:FIXME            26.65 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 24, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-140.22 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "AMBERG GUEST FARM, PAARL (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "AMBERG GUEST FARM" "PAARL (ZA)"
-  Liabilities:Credit-Card  -140.22 EUR
-    date: 2018-12-24
-    source_desc: "AMBERG GUEST FARM, PAARL (ZA)"
-  Expenses:FIXME            140.22 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 26, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-26.33 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "TABLE BAY, CAPE TOWN (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "TABLE BAY" "CAPE TOWN (ZA)"
-  Liabilities:Credit-Card  -26.33 EUR
-    date: 2018-12-24
-    source_desc: "TABLE BAY, CAPE TOWN (ZA)"
-  Expenses:FIXME            26.33 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 27, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-1.24 EUR",
-;               "date": "2018-12-24",
+;               "amount": "-0.62 EUR",
+;               "date": "2018-12-25",
 ;               "key_value_pairs": {
 ;                 "desc": "V A WATERFRONT, WATERFRONT (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-24 * "V A WATERFRONT" "WATERFRONT (ZA)"
-  Liabilities:Credit-Card  -1.24 EUR
-    date: 2018-12-24
+2018-12-25 * "V A WATERFRONT" "WATERFRONT (ZA)"
+  Liabilities:Credit-Card  -0.62 EUR
+    date: 2018-12-25
     source_desc: "V A WATERFRONT, WATERFRONT (ZA)"
-  Expenses:FIXME            1.24 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 29, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-52.97 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "KYOTO GARDEN SUSHI" "TAMBOERSKLOOF (ZA)"
-  Liabilities:Credit-Card  -52.97 EUR
-    date: 2018-12-24
-    source_desc: "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
-  Expenses:FIXME            52.97 EUR
-
-;; date: 2018-12-24
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 105, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-8.72 EUR",
-;               "date": "2018-12-24",
-;               "key_value_pairs": {
-;                 "desc": "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-24 * "SANBI KIRSTENBOSCH" "NEWLANDS (ZA)"
-  Liabilities:Credit-Card  -8.72 EUR
-    date: 2018-12-24
-    source_desc: "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
-  Expenses:FIXME            8.72 EUR
+  Expenses:FIXME            0.62 EUR
 
 ;; date: 2018-12-25
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 18, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-14.09 EUR",
+;               "date": "2018-12-25",
+;               "key_value_pairs": {
+;                 "desc": "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-25 * "KLOOFNEK GROCER   82817" "TAMBOERSKLOO (ZA)"
+  Liabilities:Credit-Card  -14.09 EUR
+    date: 2018-12-25
+    source_desc: "KLOOFNEK GROCER   82817, TAMBOERSKLOO (ZA)"
+  Expenses:FIXME            14.09 EUR
+
+;; date: 2018-12-26
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 20, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-89.25 EUR",
+;               "date": "2018-12-26",
+;               "key_value_pairs": {
+;                 "desc": "NATURAL WORLD, KIRSTENBOSCH (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-26 * "NATURAL WORLD" "KIRSTENBOSCH (ZA)"
+  Liabilities:Credit-Card  -89.25 EUR
+    date: 2018-12-26
+    source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
+  Expenses:FIXME            89.25 EUR
+
+;; date: 2018-12-26
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 22, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-26.65 EUR",
+;               "date": "2018-12-26",
+;               "key_value_pairs": {
+;                 "desc": "NATURAL WORLD, KIRSTENBOSCH (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-26 * "NATURAL WORLD" "KIRSTENBOSCH (ZA)"
+  Liabilities:Credit-Card  -26.65 EUR
+    date: 2018-12-26
+    source_desc: "NATURAL WORLD, KIRSTENBOSCH (ZA)"
+  Expenses:FIXME            26.65 EUR
+
+;; date: 2018-12-26
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 107, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-172.36 EUR",
-;               "date": "2018-12-25",
+;               "date": "2018-12-26",
 ;               "key_value_pairs": {
 ;                 "desc": "Mountain Magic Gard, Cape Town (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-25 * "Mountain Magic Gard" "Cape Town (ZA)"
+2018-12-26 * "Mountain Magic Gard" "Cape Town (ZA)"
   Liabilities:Credit-Card  -172.36 EUR
-    date: 2018-12-25
+    date: 2018-12-26
     source_desc: "Mountain Magic Gard, Cape Town (ZA)"
   Expenses:FIXME            172.36 EUR
 
-;; date: 2018-12-25
+;; date: 2018-12-26
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 109, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-35.96 EUR",
-;               "date": "2018-12-25",
+;               "date": "2018-12-26",
 ;               "key_value_pairs": {
 ;                 "desc": "HOTELS.COM154396674899, NL.HOTELS.COM (ES)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-25 * "HOTELS.COM154396674899" "NL.HOTELS.COM (ES)"
+2018-12-26 * "HOTELS.COM154396674899" "NL.HOTELS.COM (ES)"
   Liabilities:Credit-Card  -35.96 EUR
-    date: 2018-12-25
+    date: 2018-12-26
     source_desc: "HOTELS.COM154396674899, NL.HOTELS.COM (ES)"
   Expenses:FIXME            35.96 EUR
 
-;; date: 2018-12-25
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 110, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-32.72 EUR",
-;               "date": "2018-12-25",
-;               "key_value_pairs": {
-;                 "desc": "BRASS BELL RESTAURANT, KALK BAY (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-25 * "BRASS BELL RESTAURANT" "KALK BAY (ZA)"
-  Liabilities:Credit-Card  -32.72 EUR
-    date: 2018-12-25
-    source_desc: "BRASS BELL RESTAURANT, KALK BAY (ZA)"
-  Expenses:FIXME            32.72 EUR
-
-;; date: 2018-12-25
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 112, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-15.58 EUR",
-;               "date": "2018-12-25",
-;               "key_value_pairs": {
-;                 "desc": "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-25 * "BOOTLEGGER BAKOVEN" "BAKOVEN (ZA)"
-  Liabilities:Credit-Card  -15.58 EUR
-    date: 2018-12-25
-    source_desc: "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
-  Expenses:FIXME            15.58 EUR
-
-;; date: 2018-12-25
-;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 114, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-77.9 EUR",
-;               "date": "2018-12-25",
-;               "key_value_pairs": {
-;                 "desc": "THE MUIZE BNB, MUIZENBERG (ZA)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2018-12-25 * "THE MUIZE BNB" "MUIZENBERG (ZA)"
-  Liabilities:Credit-Card  -77.9 EUR
-    date: 2018-12-25
-    source_desc: "THE MUIZE BNB, MUIZENBERG (ZA)"
-  Expenses:FIXME            77.9 EUR
-
-;; date: 2018-12-26
+;; date: 2018-12-27
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 116, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-26.01 EUR",
-;               "date": "2018-12-26",
+;               "date": "2018-12-27",
 ;               "key_value_pairs": {
 ;                 "desc": "JONKERSHUIS CONSTA79002, CONSTANTIA (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-26 * "JONKERSHUIS CONSTA79002" "CONSTANTIA (ZA)"
+2018-12-27 * "JONKERSHUIS CONSTA79002" "CONSTANTIA (ZA)"
   Liabilities:Credit-Card  -26.01 EUR
-    date: 2018-12-26
+    date: 2018-12-27
     source_desc: "JONKERSHUIS CONSTA79002, CONSTANTIA (ZA)"
   Expenses:FIXME            26.01 EUR
 
-;; date: 2018-12-26
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 24, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-140.22 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "AMBERG GUEST FARM, PAARL (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "AMBERG GUEST FARM" "PAARL (ZA)"
+  Liabilities:Credit-Card  -140.22 EUR
+    date: 2018-12-28
+    source_desc: "AMBERG GUEST FARM, PAARL (ZA)"
+  Expenses:FIXME            140.22 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 26, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-26.33 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "TABLE BAY, CAPE TOWN (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "TABLE BAY" "CAPE TOWN (ZA)"
+  Liabilities:Credit-Card  -26.33 EUR
+    date: 2018-12-28
+    source_desc: "TABLE BAY, CAPE TOWN (ZA)"
+  Expenses:FIXME            26.33 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 27, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-1.24 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "V A WATERFRONT, WATERFRONT (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "V A WATERFRONT" "WATERFRONT (ZA)"
+  Liabilities:Credit-Card  -1.24 EUR
+    date: 2018-12-28
+    source_desc: "V A WATERFRONT, WATERFRONT (ZA)"
+  Expenses:FIXME            1.24 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 29, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-52.97 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "KYOTO GARDEN SUSHI" "TAMBOERSKLOOF (ZA)"
+  Liabilities:Credit-Card  -52.97 EUR
+    date: 2018-12-28
+    source_desc: "KYOTO GARDEN SUSHI, TAMBOERSKLOOF (ZA)"
+  Expenses:FIXME            52.97 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 105, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-8.72 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "SANBI KIRSTENBOSCH" "NEWLANDS (ZA)"
+  Liabilities:Credit-Card  -8.72 EUR
+    date: 2018-12-28
+    source_desc: "SANBI KIRSTENBOSCH, NEWLANDS (ZA)"
+  Expenses:FIXME            8.72 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 110, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-32.72 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "BRASS BELL RESTAURANT, KALK BAY (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "BRASS BELL RESTAURANT" "KALK BAY (ZA)"
+  Liabilities:Credit-Card  -32.72 EUR
+    date: 2018-12-28
+    source_desc: "BRASS BELL RESTAURANT, KALK BAY (ZA)"
+  Expenses:FIXME            32.72 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 112, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-15.58 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "BOOTLEGGER BAKOVEN" "BAKOVEN (ZA)"
+  Liabilities:Credit-Card  -15.58 EUR
+    date: 2018-12-28
+    source_desc: "BOOTLEGGER BAKOVEN, BAKOVEN (ZA)"
+  Expenses:FIXME            15.58 EUR
+
+;; date: 2018-12-28
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 114, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-77.9 EUR",
+;               "date": "2018-12-28",
+;               "key_value_pairs": {
+;                 "desc": "THE MUIZE BNB, MUIZENBERG (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2018-12-28 * "THE MUIZE BNB" "MUIZENBERG (ZA)"
+  Liabilities:Credit-Card  -77.9 EUR
+    date: 2018-12-28
+    source_desc: "THE MUIZE BNB, MUIZENBERG (ZA)"
+  Expenses:FIXME            77.9 EUR
+
+;; date: 2018-12-28
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 118, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-14.65 EUR",
-;               "date": "2018-12-26",
+;               "date": "2018-12-28",
 ;               "key_value_pairs": {
 ;                 "desc": "GROOT CONSTANTIA, CONSTANTIA (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-26 * "GROOT CONSTANTIA" "CONSTANTIA (ZA)"
+2018-12-28 * "GROOT CONSTANTIA" "CONSTANTIA (ZA)"
   Liabilities:Credit-Card  -14.65 EUR
-    date: 2018-12-26
+    date: 2018-12-28
     source_desc: "GROOT CONSTANTIA, CONSTANTIA (ZA)"
   Expenses:FIXME            14.65 EUR
 
-;; date: 2018-12-26
+;; date: 2018-12-28
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 120, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-13.09 EUR",
-;               "date": "2018-12-26",
+;               "date": "2018-12-28",
 ;               "key_value_pairs": {
 ;                 "desc": "GROOT CONSTANTIA, CONSTANTIA (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-26 * "GROOT CONSTANTIA" "CONSTANTIA (ZA)"
+2018-12-28 * "GROOT CONSTANTIA" "CONSTANTIA (ZA)"
   Liabilities:Credit-Card  -13.09 EUR
-    date: 2018-12-26
+    date: 2018-12-28
     source_desc: "GROOT CONSTANTIA, CONSTANTIA (ZA)"
   Expenses:FIXME            13.09 EUR
 
-;; date: 2018-12-27
+;; date: 2018-12-28
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 122, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-34.27 EUR",
-;               "date": "2018-12-27",
+;               "date": "2018-12-28",
 ;               "key_value_pairs": {
 ;                 "desc": "AMBERG ART AND KITCHEN, PAARL (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-27 * "AMBERG ART AND KITCHEN" "PAARL (ZA)"
+2018-12-28 * "AMBERG ART AND KITCHEN" "PAARL (ZA)"
   Liabilities:Credit-Card  -34.27 EUR
-    date: 2018-12-27
+    date: 2018-12-28
     source_desc: "AMBERG ART AND KITCHEN, PAARL (ZA)"
   Expenses:FIXME            34.27 EUR
 
-;; date: 2018-12-27
+;; date: 2018-12-29
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 124, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-193.1 EUR",
-;               "date": "2018-12-27",
+;               "date": "2018-12-29",
 ;               "key_value_pairs": {
 ;                 "desc": "LA PETITE COLOMBE, FRANSCHHOEK (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-27 * "LA PETITE COLOMBE" "FRANSCHHOEK (ZA)"
+2018-12-29 * "LA PETITE COLOMBE" "FRANSCHHOEK (ZA)"
   Liabilities:Credit-Card  -193.1 EUR
-    date: 2018-12-27
+    date: 2018-12-29
     source_desc: "LA PETITE COLOMBE, FRANSCHHOEK (ZA)"
   Expenses:FIXME            193.1 EUR
 
-;; date: 2018-12-27
+;; date: 2018-12-29
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 125, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-24.26 EUR",
-;               "date": "2018-12-27",
+;               "date": "2018-12-29",
 ;               "key_value_pairs": {
 ;                 "desc": "THELAB LIFESTYLE CAPE TO, HOUTBAY (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-27 * "THELAB LIFESTYLE CAPE TO" "HOUTBAY (ZA)"
+2018-12-29 * "THELAB LIFESTYLE CAPE TO" "HOUTBAY (ZA)"
   Liabilities:Credit-Card  -24.26 EUR
-    date: 2018-12-27
+    date: 2018-12-29
     source_desc: "THELAB LIFESTYLE CAPE TO, HOUTBAY (ZA)"
   Expenses:FIXME            24.26 EUR
 
@@ -511,216 +492,235 @@
     source_desc: "IDEAL BETALING, DANK U"
   Expenses:FIXME           -500 EUR
 
-;; date: 2018-12-30
+;; date: 2019-01-01
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 127, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-14.31 EUR",
-;               "date": "2018-12-30",
+;               "date": "2019-01-01",
 ;               "key_value_pairs": {
 ;                 "desc": "AMBERG ART AND KITCHEN, PAARL (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-30 * "AMBERG ART AND KITCHEN" "PAARL (ZA)"
+2019-01-01 * "AMBERG ART AND KITCHEN" "PAARL (ZA)"
   Liabilities:Credit-Card  -14.31 EUR
-    date: 2018-12-30
+    date: 2019-01-01
     source_desc: "AMBERG ART AND KITCHEN, PAARL (ZA)"
   Expenses:FIXME            14.31 EUR
 
-;; date: 2018-12-30
+;; date: 2019-01-01
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 129, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-14.93 EUR",
-;               "date": "2018-12-30",
+;               "date": "2019-01-01",
 ;               "key_value_pairs": {
 ;                 "desc": "HERMANUS GOLF CLUB, HERMANUS (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-30 * "HERMANUS GOLF CLUB" "HERMANUS (ZA)"
+2019-01-01 * "HERMANUS GOLF CLUB" "HERMANUS (ZA)"
   Liabilities:Credit-Card  -14.93 EUR
-    date: 2018-12-30
+    date: 2019-01-01
     source_desc: "HERMANUS GOLF CLUB, HERMANUS (ZA)"
   Expenses:FIXME            14.93 EUR
 
-;; date: 2018-12-30
+;; date: 2019-01-01
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 131, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-30.68 EUR",
-;               "date": "2018-12-30",
+;               "date": "2019-01-01",
 ;               "key_value_pairs": {
 ;                 "desc": "SHELL HERMANUS, HERMANUS (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-30 * "SHELL HERMANUS" "HERMANUS (ZA)"
+2019-01-01 * "SHELL HERMANUS" "HERMANUS (ZA)"
   Liabilities:Credit-Card  -30.68 EUR
-    date: 2018-12-30
+    date: 2019-01-01
     source_desc: "SHELL HERMANUS, HERMANUS (ZA)"
   Expenses:FIXME            30.68 EUR
 
-;; date: 2018-12-30
+;; date: 2019-01-01
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 133, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-140.01 EUR",
-;               "date": "2018-12-30",
+;               "date": "2019-01-01",
 ;               "key_value_pairs": {
 ;                 "desc": "AMBERG GUEST FARM, PAARL (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-30 * "AMBERG GUEST FARM" "PAARL (ZA)"
+2019-01-01 * "AMBERG GUEST FARM" "PAARL (ZA)"
   Liabilities:Credit-Card  -140.01 EUR
-    date: 2018-12-30
+    date: 2019-01-01
     source_desc: "AMBERG GUEST FARM, PAARL (ZA)"
   Expenses:FIXME            140.01 EUR
 
-;; date: 2018-12-31
+;; date: 2019-01-03
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 135, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-62.49 EUR",
-;               "date": "2018-12-31",
+;               "date": "2019-01-03",
 ;               "key_value_pairs": {
 ;                 "desc": "BALMORAL LODGE, DURBANVILLE H (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2018-12-31 * "BALMORAL LODGE" "DURBANVILLE H (ZA)"
+2019-01-03 * "BALMORAL LODGE" "DURBANVILLE H (ZA)"
   Liabilities:Credit-Card  -62.49 EUR
-    date: 2018-12-31
+    date: 2019-01-03
     source_desc: "BALMORAL LODGE, DURBANVILLE H (ZA)"
   Expenses:FIXME            62.49 EUR
 
-;; date: 2019-01-02
+;; date: 2019-01-03
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 137, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-55 EUR",
-;               "date": "2019-01-02",
+;               "date": "2019-01-03",
 ;               "key_value_pairs": {
 ;                 "desc": "SNCF WEB MOBILE, PARIS (FR)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-02 * "SNCF WEB MOBILE" "PARIS (FR)"
+2019-01-03 * "SNCF WEB MOBILE" "PARIS (FR)"
   Liabilities:Credit-Card  -55 EUR
-    date: 2019-01-02
+    date: 2019-01-03
     source_desc: "SNCF WEB MOBILE, PARIS (FR)"
   Expenses:FIXME            55 EUR
 
 ;; date: 2019-01-04
+;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 16, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-26.32 EUR",
+;               "date": "2019-01-04",
+;               "key_value_pairs": {
+;                 "desc": "Avis Rent A Car, JOHANNESBURG (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-01-04 * "Avis Rent A Car" "JOHANNESBURG (ZA)"
+  Liabilities:Credit-Card  -26.32 EUR
+    date: 2019-01-04
+    source_desc: "Avis Rent A Car, JOHANNESBURG (ZA)"
+  Expenses:FIXME            26.32 EUR
+
+;; date: 2019-01-05
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 138, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-17.97 EUR",
-;               "date": "2019-01-04",
+;               "date": "2019-01-05",
 ;               "key_value_pairs": {
 ;                 "desc": "JACKSONS INTERNATIONAL, KEMPTON PARK (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-04 * "JACKSONS INTERNATIONAL" "KEMPTON PARK (ZA)"
+2019-01-05 * "JACKSONS INTERNATIONAL" "KEMPTON PARK (ZA)"
   Liabilities:Credit-Card  -17.97 EUR
-    date: 2019-01-04
+    date: 2019-01-05
     source_desc: "JACKSONS INTERNATIONAL, KEMPTON PARK (ZA)"
   Expenses:FIXME            17.97 EUR
 
-;; date: 2019-01-04
+;; date: 2019-01-06
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 140, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-52.62 EUR",
-;               "date": "2019-01-04",
+;               "date": "2019-01-06",
 ;               "key_value_pairs": {
 ;                 "desc": "Bakubung Kubu Lodge, PILANESBURG (ZA)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-04 * "Bakubung Kubu Lodge" "PILANESBURG (ZA)"
+2019-01-06 * "Bakubung Kubu Lodge" "PILANESBURG (ZA)"
   Liabilities:Credit-Card  -52.62 EUR
-    date: 2019-01-04
+    date: 2019-01-06
     source_desc: "Bakubung Kubu Lodge, PILANESBURG (ZA)"
   Expenses:FIXME            52.62 EUR
 
-;; date: 2019-01-14
+;; date: 2019-01-15
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 205, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-96 EUR",
-;               "date": "2019-01-14",
+;               "date": "2019-01-15",
 ;               "key_value_pairs": {
 ;                 "desc": "SNCF WEB MOBILE, PARIS (FR)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-14 * "SNCF WEB MOBILE" "PARIS (FR)"
+2019-01-15 * "SNCF WEB MOBILE" "PARIS (FR)"
   Liabilities:Credit-Card  -96 EUR
-    date: 2019-01-14
+    date: 2019-01-15
     source_desc: "SNCF WEB MOBILE, PARIS (FR)"
   Expenses:FIXME            96 EUR
 
-;; date: 2019-01-14
+;; date: 2019-01-15
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 206, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-94 EUR",
-;               "date": "2019-01-14",
+;               "date": "2019-01-15",
 ;               "key_value_pairs": {
 ;                 "desc": "SNCF WEB MOBILE, PARIS (FR)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-14 * "SNCF WEB MOBILE" "PARIS (FR)"
+2019-01-15 * "SNCF WEB MOBILE" "PARIS (FR)"
   Liabilities:Credit-Card  -94 EUR
-    date: 2019-01-14
+    date: 2019-01-15
     source_desc: "SNCF WEB MOBILE, PARIS (FR)"
   Expenses:FIXME            94 EUR
 
-;; date: 2019-01-14
+;; date: 2019-01-15
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 207, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
 ; features: [
 ;             {
 ;               "amount": "-49 EUR",
-;               "date": "2019-01-14",
+;               "date": "2019-01-15",
 ;               "key_value_pairs": {
 ;                 "desc": "SNCF OUIGO, PARIS LA DEFE (FR)"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-01-14 * "SNCF OUIGO" "PARIS LA DEFE (FR)"
+2019-01-15 * "SNCF OUIGO" "PARIS LA DEFE (FR)"
   Liabilities:Credit-Card  -49 EUR
-    date: 2019-01-14
+    date: 2019-01-15
     source_desc: "SNCF OUIGO, PARIS LA DEFE (FR)"
   Expenses:FIXME            49 EUR
 
-;; date: 2019-01-18
+;; date: 2019-01-17
 ;; info: {"filename": "<testdata>/icscards_big.xlsx", "line": 4, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
 
-2019-01-18 balance Liabilities:Credit-Card                         -1156.34 EUR
+2019-01-17 balance Liabilities:Credit-Card                         -1156.34 EUR

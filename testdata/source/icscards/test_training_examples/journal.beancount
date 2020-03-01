@@ -11,15 +11,17 @@ plugin "beancount.plugins.auto_accounts"
     date: 2019-11-27
     source_desc: "IDEAL BETALING, DANK U"
     cleared: TRUE
+    invalid1: "1 extra"
   Assets:Checking  -66.88 EUR
     date: 2019-12-02
     source_desc: "NATIONAL FEDERAL DES:TRNSFR"
     cleared: TRUE
-    invalid0: "1 extra"
+    invalid2: "1 extra"
 
 2019-10-10 * "Starbucks, STARBUCKS STORE 12345 (US)"
   Liabilities:Credit-Card  -2.45 EUR
     date: 2019-10-10
     source_desc: "Starbucks, STARBUCKS STORE 12345 (US)"
     cleared: TRUE
+    invalid0: "1 extra"
   Expenses:Coffee            2.45 EUR
