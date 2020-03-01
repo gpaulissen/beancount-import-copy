@@ -1,6 +1,21 @@
 import os
 from setuptools import setup
 
+import glob
+import sys
+
+def get_egg_file(module_name):
+    def f(packages):
+        return glob.glob(
+            os.path.join(os.path.dirname(os.path.dirname(sys.executable)),
+                         'lib', 'python*', packages, module_name + '.egg-link'))
+
+    return f('site-packages') or f('dist-packages')
+
+egg_file = get_egg_file('beancount_import')
+if egg_file:
+    os.remove(egg_file[0])
+    
 with open(
         os.path.join(os.path.dirname(__file__), 'README.md'),
         'r',

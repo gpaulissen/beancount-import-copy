@@ -13,6 +13,7 @@ examples = [
     ('test_training_examples', 'icscards.xlsx'),
     ('test_invalid', 'icscards.xlsx'),
     ('test_big', 'icscards_big.xlsx'),
+    ('test_missing', 'icscards_missing.xlsx'),
 ]
 
 

@@ -228,6 +228,9 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
         balances = []
         account = None
         new_page = False
+        opening_balance = None
+        closing_balance = None
+        base_amount_total = 0
         filename = os.path.abspath(filename)
         wb = load_workbook(filename, read_only=True)
         for sheet_i, sheet_name in enumerate(wb.sheetnames, start=1):
@@ -253,6 +256,18 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     if sheet_i == 1:
                         cols = convert_str_to_list(row[0].value, 12)
                         balance_names_actual = cols[0:4]
+
+                        # opening balance
+                        amount, transaction_type = cols[4], cols[5]
+                        # amount something like € 1.827,97
+                        amount = D(amount[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
+                        if transaction_type == 'Af':
+                            amount = -amount
+                        elif transaction_type != 'Bij':
+                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
+                        opening_balance = amount
+
+                        # closing balance
                         amount, transaction_type = cols[-2:]
                         # amount something like € 1.827,97
                         amount = D(amount[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
@@ -260,6 +275,7 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                             amount = -amount
                         elif transaction_type != 'Bij':
                             raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
+                        closing_balance = amount
                         balances.append(
                             RawBalance(
                                 account=account,
@@ -343,6 +359,8 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     else:
                         amount=Amount(number=sign * base_amount, currency=base_currency)
                         cost=None
+
+                    base_amount_total += sign * base_amount
                         
                     entry = ICScardsEntry(account=account,
                                           date=date,
@@ -359,6 +377,9 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
 
         # No need to sort balances: there is just one
         assert len(balances) == 1, print("Only the balance for the first sheet should be there")
+        assert opening_balance + base_amount_total == closing_balance, \
+            print("Opening balance ({}) plus the base amount total ({}) should be equal to the closing balance ({})".\
+                  format(opening_balance, base_amount_total, closing_balance))
         # No need to sort entries: already sorted by sheet + line
         
         # entries.reverse()
@@ -369,7 +390,8 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
 
     except Exception as e:
         backtrace = "".join(traceback.TracebackException.from_exception(e).format())
-        breakpoint()
+        if DEBUG:
+            breakpoint()
         raise RuntimeError(backtrace + "\nXLSX file has incorrect format", filename) from e
     finally:
         locale.setlocale(category=locale.LC_ALL, locale=current_locale)
