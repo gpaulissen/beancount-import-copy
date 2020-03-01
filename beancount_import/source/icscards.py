@@ -291,6 +291,20 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                         # sheet 'Table 3' contains "Nieuw openstaand saldo Af" in fourth column
                         balance_names_actual = [cols0[0], cols1[0], cols2[0], cols3[0].replace(' Af', '')]                                        
                     assert balance_names_actual == balance_names, print("Actual: {0}; Expected: {1}".format(balance_names_actual, balance_names))
+                elif (sheet_i == 1 and line_i == 5) or (sheet_i > 1 and line_i == 4):
+                    # line with transaction_names
+                    continue
+                elif len(row) == 6:
+                    # Something like:
+                    #
+                    # 20 aug | 21 aug | NETFLIX.COM       866-579-7172 | NL |  7.99 | Af
+                    #
+                    # probably due to a later line like:
+                    #
+                    # 04 sep | 05 sep | NEWREST WAGONS LITS FRANCPARIS | FR | 10.96 | Af
+                    #
+                    assert len(row) == 5 or len(row) == 7 or len(row) == 8,\
+                        print("The number of columns should be 5, 7 or 8: {}".format(str(row)))
                 # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
                 elif len(row) == 5 or len(row) == 7 or len(row) == 8:
                     # GJP 2020-03-01
