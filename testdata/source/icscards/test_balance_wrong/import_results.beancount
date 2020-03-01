@@ -1,0 +1,213 @@
+;; date: 2019-01-20
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 9, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-7.99 EUR",
+;               "date": "2019-01-20",
+;               "key_value_pairs": {
+;                 "desc": "NETFLIX.COM, 866-579-7172 (NL)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-01-20 * "NETFLIX.COM" "866-579-7172 (NL)"
+  Liabilities:Credit-Card  -7.99 EUR
+    date: 2019-01-20
+    source_desc: "NETFLIX.COM, 866-579-7172 (NL)"
+  Expenses:FIXME            7.99 EUR
+
+;; date: 2019-01-22
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 7, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "294.48 EUR",
+;               "date": "2019-01-22",
+;               "key_value_pairs": {
+;                 "desc": "ATTRAHENT, SOMERSET WEST (ZA)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-01-22 * "ATTRAHENT" "SOMERSET WEST (ZA)"
+  Liabilities:Credit-Card   294.48 EUR
+    date: 2019-01-22
+    source_desc: "ATTRAHENT, SOMERSET WEST (ZA)"
+  Expenses:FIXME           -294.48 EUR
+
+;; date: 2019-01-31
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 6, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "861.86 EUR",
+;               "date": "2019-01-31",
+;               "key_value_pairs": {
+;                 "desc": "IDEAL BETALING, DANK U"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-01-31 * "IDEAL BETALING, DANK U"
+  Liabilities:Credit-Card   861.86 EUR
+    date: 2019-01-31
+    source_desc: "IDEAL BETALING, DANK U"
+  Expenses:FIXME           -861.86 EUR
+
+;; date: 2019-02-14
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 10, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-5.1 EUR",
+;               "date": "2019-02-14",
+;               "key_value_pairs": {
+;                 "desc": "SERCAM25201DELI1, MERIGNAC (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-14 * "SERCAM25201DELI1" "MERIGNAC (FR)"
+  Liabilities:Credit-Card  -5.1 EUR
+    date: 2019-02-14
+    source_desc: "SERCAM25201DELI1, MERIGNAC (FR)"
+  Expenses:FIXME            5.1 EUR
+
+;; date: 2019-02-14
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 11, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-4.99 EUR",
+;               "date": "2019-02-14",
+;               "key_value_pairs": {
+;                 "desc": "ELIOR60319AFVAL1, VALBONNE (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-14 * "ELIOR60319AFVAL1" "VALBONNE (FR)"
+  Liabilities:Credit-Card  -4.99 EUR
+    date: 2019-02-14
+    source_desc: "ELIOR60319AFVAL1, VALBONNE (FR)"
+  Expenses:FIXME            4.99 EUR
+
+;; date: 2019-02-14
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 12, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-7.4 EUR",
+;               "date": "2019-02-14",
+;               "key_value_pairs": {
+;                 "desc": "QPF LAPOSTE AUT/2500606, ANTIB2500606/ (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-14 * "QPF LAPOSTE AUT/2500606" "ANTIB2500606/ (FR)"
+  Liabilities:Credit-Card  -7.4 EUR
+    date: 2019-02-14
+    source_desc: "QPF LAPOSTE AUT/2500606, ANTIB2500606/ (FR)"
+  Expenses:FIXME            7.4 EUR
+
+;; date: 2019-02-14
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 13, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-1.6 EUR",
+;               "date": "2019-02-14",
+;               "key_value_pairs": {
+;                 "desc": "ESCOTA VINCI, 6211 (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-14 * "ESCOTA VINCI" "6211 (FR)"
+  Liabilities:Credit-Card  -1.6 EUR
+    date: 2019-02-14
+    source_desc: "ESCOTA VINCI, 6211 (FR)"
+  Expenses:FIXME            1.6 EUR
+
+;; date: 2019-02-15
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 14, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-19.5 EUR",
+;               "date": "2019-02-15",
+;               "key_value_pairs": {
+;                 "desc": "SARL HERCAN RESTAUR, ANTIBES (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-15 * "SARL HERCAN RESTAUR" "ANTIBES (FR)"
+  Liabilities:Credit-Card  -19.5 EUR
+    date: 2019-02-15
+    source_desc: "SARL HERCAN RESTAUR, ANTIBES (FR)"
+  Expenses:FIXME            19.5 EUR
+
+;; date: 2019-02-15
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 15, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-1.6 EUR",
+;               "date": "2019-02-15",
+;               "key_value_pairs": {
+;                 "desc": "ESCOTA VINCI, 6211 (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-15 * "ESCOTA VINCI" "6211 (FR)"
+  Liabilities:Credit-Card  -1.6 EUR
+    date: 2019-02-15
+    source_desc: "ESCOTA VINCI, 6211 (FR)"
+  Expenses:FIXME            1.6 EUR
+
+;; date: 2019-02-15
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 16, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-5.16 EUR",
+;               "date": "2019-02-15",
+;               "key_value_pairs": {
+;                 "desc": "ELIOR60319AFVAL1, VALBONNE (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-15 * "ELIOR60319AFVAL1" "VALBONNE (FR)"
+  Liabilities:Credit-Card  -5.16 EUR
+    date: 2019-02-15
+    source_desc: "ELIOR60319AFVAL1, VALBONNE (FR)"
+  Expenses:FIXME            5.16 EUR
+
+;; date: 2019-02-15
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 17, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+; features: [
+;             {
+;               "amount": "-59.5 EUR",
+;               "date": "2019-02-15",
+;               "key_value_pairs": {
+;                 "desc": "NICE T2 MULTI M 4521348, 06SNI6 CB (FR)"
+;               },
+;               "source_account": "Liabilities:Credit-Card"
+;             }
+;           ]
+2019-02-15 * "NICE T2 MULTI M 4521348" "06SNI6 CB (FR)"
+  Liabilities:Credit-Card  -59.5 EUR
+    date: 2019-02-15
+    source_desc: "NICE T2 MULTI M 4521348, 06SNI6 CB (FR)"
+  Expenses:FIXME            59.5 EUR
+
+;; date: 2019-02-17
+;; info: {"filename": "<testdata>/icscards_balance_wrong.xlsx", "line": 4, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+
+2019-02-17 balance Liabilities:Credit-Card                         -112.84 EUR

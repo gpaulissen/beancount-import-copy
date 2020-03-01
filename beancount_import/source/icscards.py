@@ -135,6 +135,7 @@ transaction of the following form is generated:
 
 from typing import List, Union, Optional, Set
 from openpyxl import load_workbook
+from openpyxl.cell.read_only import ReadOnlyCell
 import datetime
 import collections
 import re
@@ -305,8 +306,31 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     #
                     assert len(row) == 5 or len(row) == 7 or len(row) == 8,\
                         print("The number of columns should be 5, 7 or 8: {}".format(str(row)))
-                # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
-                elif len(row) == 5 or len(row) == 7 or len(row) == 8:
+                else:
+                    # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
+                    #
+                    # One strange exception in icscards_balance_wrong.xlsx:
+                    #
+                    # """
+                    # 31 jan          31 jan           IDEAL BETALING, DANK U                                                                                                            861,86         Bij
+                    # Uw Card met als laatste vier cijfers 0467
+                    # G.J.L.M. PAULISSEN
+                    # """
+                    if len(row) == 1:
+                        m = re.search('^(.+)\nUw Card met als laatste vier cijfers', row[0].value)
+                        if m:
+                            if DEBUG:
+                                breakpoint()
+                            line = row[0].value
+                            row = []
+                            for column_i, column_value in enumerate(convert_str_to_list(line, 5), start=1):
+                                if column_i == 4:
+                                    column_value = column_value.replace('.', '').replace(',', '.')  # Take care of comma's and points
+                                row.append(ReadOnlyCell(sheet=sheet, row=line_i, column=column_i, value=column_value))
+                        
+                    if not(len(row) == 5 or len(row) == 7 or len(row) == 8):
+                        continue
+                    
                     # GJP 2020-03-01
                     # Skip transaction date (index 0) since it gives a wrong balance.
                     # Use booking date (index 1) in order to get a correct balance.

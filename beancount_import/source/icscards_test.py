@@ -9,10 +9,11 @@ testdata_dir = os.path.realpath(
         os.path.dirname(__file__), '..', '..', 'testdata', 'source', 'icscards'))
 
 examples = [
+    ('test_balance_wrong', 'icscards_balance_wrong.xlsx'),
     ('test_basic', 'icscards.xlsx'),
-    ('test_training_examples', 'icscards.xlsx'),
-    ('test_invalid', 'icscards.xlsx'),
     ('test_big', 'icscards_big.xlsx'),
+    ('test_invalid', 'icscards.xlsx'),
+    ('test_training_examples', 'icscards.xlsx'),
 ]
 
 examples_xfail = [
