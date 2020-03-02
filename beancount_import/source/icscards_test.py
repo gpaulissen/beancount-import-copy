@@ -14,26 +14,12 @@ examples = [
     ('test_big', 'icscards_big.xlsx'),
     ('test_invalid', 'icscards.xlsx'),
     ('test_training_examples', 'icscards.xlsx'),
-]
-
-examples_xfail = [
     ('test_missing', 'icscards_missing.xlsx'),
 ]
 
 
 @pytest.mark.parametrize('name,icscards_filename', examples)
 def test_source(name: str, icscards_filename: str):
-    check_source_example(
-        example_dir=os.path.join(testdata_dir, name),
-        source_spec={
-            'module': 'beancount_import.source.icscards',
-            'filenames': [os.path.join(testdata_dir, icscards_filename)],
-        },
-        replacements=[(testdata_dir, '<testdata>')])
-
-@pytest.mark.xfail(raises=RuntimeError)
-@pytest.mark.parametrize('name,icscards_filename', examples_xfail)
-def test_source_xfail(name: str, icscards_filename: str):
     check_source_example(
         example_dir=os.path.join(testdata_dir, name),
         source_spec={

@@ -142,6 +142,7 @@ import re
 import os
 import locale
 import traceback
+from math import copysign
 
 from beancount.core.data import Transaction, Posting, Balance, EMPTY_SET
 from beancount.core.amount import Amount
@@ -157,9 +158,6 @@ DEBUG = False
 
 def convert_str_to_list(str, max_items, sep=r'\s\s+|\t|\n'):
     return [x for x in re.split(sep, str)[0:max_items]]
-
-def convert_str_to_id_list(str, max_items, sep=r'\s\s+|\t|\n'):
-    return [x.replace(' ', '_') for x in re.split(sep, str)[0:max_items]]
 
 # account may be either the icscards_id or the journal account name
 ICScardsEntry = collections.namedtuple(
@@ -194,6 +192,63 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
         while d <= page_date:
             d = add_years(d, 1)
         return add_years(d, -1)
+
+    def get_amount(sheet_in, line_in, amount_in, transaction_type_in, foreign_currency_in=False):
+        sign_out, amount_out, currency_out = 1, None, 'EUR'
+
+        # determine sign_out
+        if isinstance(transaction_type_in, str):
+            if transaction_type_in == 'Af':
+                sign_out = -1
+            elif transaction_type_in == 'Bij':
+                pass
+            else:
+                raise RuntimeError('Unknown transaction type "{0}" in sheet {1}, row {2}'.format(transaction_type_in, sheet_in, line_in))
+        elif isinstance(transaction_type_in, ReadOnlyCell):
+            if transaction_type_in.value == 'Af':
+                sign_out = -1
+            elif transaction_type_in.value == 'Bij':
+                pass
+            else:
+                raise RuntimeError('Unknown transaction type "{0}" in sheet {1}, row {2}'.format(transaction_type_in.value, sheet_in, line_in))
+        else:
+            raise RuntimeError('Wrong type for transaction type "{0}" in sheet {1}, row {2}'.format(type(transaction_type_in), sheet_in, line_in))
+                
+        # determine amount_out and currency_out
+        if isinstance(amount_in, str):
+            # Is amount something like 1.827,97 ? (dutch) or 1,827.97 ?
+            if amount_in[-3] == ',':
+                amount_in = amount_in.replace('.', '').replace(',', '.')
+            # amount something like € 1.827,97 ?
+            if not(amount_in[0] >= '0' and amount_in[0] <= '9') and amount_in[1] == ' ':
+                # Skip euro sign and take care of comma's and points
+                amount_out = amount_in[2:]
+            else:
+                # Take care of comma's and points
+                amount_out = amount_in                
+        elif isinstance(amount_in, ReadOnlyCell) and foreign_currency_in:
+            if isinstance(amount_in.value, str):
+                # '235,01 EGP'
+                currency_out = amount_in.value[-3:]                            
+                amount_out = locale.atof(amount_in.value[0:-4])
+            elif isinstance(amount_in.value, (int, float)):
+                currency_out = amount_in.number_format[-4:-1] # number_format == '0.00 [$USD]'
+                amount_out = amount_in.value
+            else:
+                raise RuntimeError('Wrong type for amount value "{0}" in sheet {1}, row {2}'.format(type(amount_in.value), sheet_in, line_in))
+        elif isinstance(amount_in, ReadOnlyCell):
+            if isinstance(amount_in.value, str):
+                # '235,01'
+                amount_out = locale.atof(amount_in.value)
+            elif isinstance(amount_in.value, (int, float)):
+                amount_out = amount_in.value
+            else:
+                raise RuntimeError('Wrong type for amount value "{0}" in sheet {1}, row {2}'.format(type(amount_in.value), sheet_in, line_in))
+        else:
+            raise RuntimeError('Wrong type for amount "{0}" in sheet {1}, row {2}'.format(type(amount_in), sheet_in, line_in))
+        amount_out = D(str(amount_out)) # convert to str to keep just the last two decimals
+
+        return sign_out * amount_out, currency_out
 
     new_page_names = [
         'Datum',
@@ -248,7 +303,7 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     new_page = True
                 elif new_page:
                     new_page = False
-                    if page_date == None:
+                    if page_date is None:
                         page_date, account = convert_str_to_list(row[0].value, 2)
                         page_date = datetime.datetime.strptime(page_date, '%d %B %Y').date()
                 # Handle the balance row
@@ -259,29 +314,15 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                         balance_names_actual = cols[0:4]
 
                         # opening balance
-                        amount, transaction_type = cols[4], cols[5]
-                        # amount something like € 1.827,97
-                        amount = D(amount[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
-                        if transaction_type == 'Af':
-                            amount = -amount
-                        elif transaction_type != 'Bij':
-                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
-                        opening_balance = amount
+                        opening_balance, currency = get_amount(sheet_i, line_i, cols[4], cols[5])
 
                         # closing balance
-                        amount, transaction_type = cols[-2:]
-                        # amount something like € 1.827,97
-                        amount = D(amount[2:].replace('.', '').replace(',', '.'))  # Skip euro sign and take care of comma's and points
-                        if transaction_type == 'Af':
-                            amount = -amount
-                        elif transaction_type != 'Bij':
-                            raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, line_i))
-                        closing_balance = amount
+                        closing_balance, currency = get_amount(sheet_i, line_i, cols[-2], cols[-1])
                         balances.append(
                             RawBalance(
                                 account=account,
                                 date=page_date,
-                                amount=Amount(number=amount, currency='EUR'),
+                                amount=Amount(number=closing_balance, currency=currency),
                                 filename=filename,
                                 line=((sheet_i-1)*100)+line_i))
                     else:
@@ -295,17 +336,6 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                 elif (sheet_i == 1 and line_i == 5) or (sheet_i > 1 and line_i == 4):
                     # line with transaction_names
                     continue
-                elif len(row) == 6:
-                    # Something like:
-                    #
-                    # 20 aug | 21 aug | NETFLIX.COM       866-579-7172 | NL |  7.99 | Af
-                    #
-                    # probably due to a later line like:
-                    #
-                    # 04 sep | 05 sep | NEWREST WAGONS LITS FRANCPARIS | FR | 10.96 | Af
-                    #
-                    assert len(row) == 5 or len(row) == 7 or len(row) == 8,\
-                        print("The number of columns should be 5, 7 or 8: {}".format(str(row)))
                 else:
                     # Handle the rest but only for the interesting lines (5, 7 or 8 non-empty columns)
                     #
@@ -316,17 +346,54 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                     # Uw Card met als laatste vier cijfers 0467
                     # G.J.L.M. PAULISSEN
                     # """
+                    #
+                    # Another strange exception in icscards_missing.xlsx, Table 2 (page 2):
+                    # """
+                    # 12 sep         13 sep          SNCF                                               MONTIGNY LE B           FR                                                         6,15          Af
+                    # """
+                    #
                     if len(row) == 1:
-                        m = re.search('^(.+)\nUw Card met als laatste vier cijfers', row[0].value)
+                        maxitems = None
+                        line = row[0].value
+                        m = re.search('^(.+)\nUw Card met als laatste vier cijfers', line)
                         if m:
-                            if DEBUG:
-                                breakpoint()
-                            line = row[0].value
+                            maxitems = 5
+                        else:
+                            line = line.strip()
+                            m = re.search(' (Bij|Af)$', line)
+                            maxitems = 8
+
+                        if m:
                             row = []
-                            for column_i, column_value in enumerate(convert_str_to_list(line, 5), start=1):
-                                if column_i == 4:
-                                    column_value = column_value.replace('.', '').replace(',', '.')  # Take care of comma's and points
+                            for column_i, column_value in enumerate(convert_str_to_list(line, maxitems), start=1):
                                 row.append(ReadOnlyCell(sheet=sheet, row=line_i, column=column_i, value=column_value))
+
+                    elif len(row) == 6:
+                        #
+                        # In icscards_missing.xlsx there is something like:
+                        #
+                        # 20 aug | 21 aug | NETFLIX.COM                                866-579-7172 | NL |  7.99 | Af
+                        #
+                        # probably due to a later line like:
+                        #
+                        # 04 sep | 05 sep | NEWREST WAGONS LITS FRANCPARIS | FR | 10.96 | Af
+                        #
+                        # Solution: create two cells with the first 25 characters and everything thereafter and strip
+                        #
+                        if DEBUG:
+                            breakpoint()
+                        new_row = []
+                        for column_i, cell in enumerate(row, start=1):
+                            if column_i in [1, 2]:
+                                new_row.append(cell)
+                            elif column_i in [4, 5, 6]:
+                                cell.column = cell.column + 1
+                                new_row.append(cell)
+                            else:
+                                assert column_i == 3
+                                new_row.append(ReadOnlyCell(sheet=sheet, row=line_i, column=3, value=cell.value[0:25].strip()))
+                                new_row.append(ReadOnlyCell(sheet=sheet, row=line_i, column=4, value=cell.value[25:].strip()))
+                        row = new_row
                         
                     if not(len(row) == 5 or len(row) == 7 or len(row) == 8):
                         continue
@@ -358,47 +425,32 @@ def load_transactions(filename: str, currency: str = 'EUR') -> [List[ICScardsEnt
                         source_desc = narration
 
                     # Is there a foreign currency or not (column -3 for 8 columns)?
-                    base_amount = None
-                    base_currency = 'EUR'
                     foreign_amount = None
                     foreign_currency = None
                     if len(row) == 8:
-                        if row[-3].number_format == 'General':
-                            # '235,01 EGP'
-                            foreign_amount = locale.atof(row[-3].value[0:-4])
-                            foreign_currency = row[-3].value[-3:]
-                        elif isinstance(row[-3].value, str):
-                            foreign_amount = locale.atof(row[-3].value[0:-4])
-                            foreign_currency = row[-3].value[-3:]                            
-                        elif isinstance(row[-3].value, float):
-                            foreign_amount = row[-3].value
-                            foreign_currency = row[-3].number_format[-4:-1] # number_format == '0.00 [$USD]'
-                        foreign_amount = D(str(foreign_amount)) # convert to str to keep just the last two decimals
+                        # foreign_amount always positive as there is no sign info
+                        foreign_amount, foreign_currency = get_amount(sheet_i, line_i, row[-3], row[-1], True)
 
                     # Skip amount in foreign currency
-                    base_amount = D(str(row[-2].value))
+                    base_amount, base_currency = get_amount(sheet_i, line_i, row[-2], row[-1])
+                    
                     if base_amount == ZERO:
                         # Skip zero-dollar transactions.
                         # Some banks produce these, e.g. for an annual fee that is waived.
                         continue
                         
-                    transaction_type = row[-1].value
-                    sign = 1
-                    if transaction_type == 'Af':
-                        sign = -1
-                    elif transaction_type != 'Bij':
-                        raise RuntimeError('Unknown transaction type "{0}" in row {1}'.format(transaction_type, row))
-
                     # In beancount we make a transaction in the foreign currency and have a cost in EUR.
                     # Cost is always positive.
+                    amount = None
+                    cost = None
                     if False: # forget about cost right now
-                        amount=Amount(number=sign * foreign_amount, currency=foreign_currency)
-                        cost=Amount(number=base_amount, currency=base_currency)
+                        amount=Amount(number=copysign(1, base_amount) * foreign_amount, currency=foreign_currency)
+                        cost=Amount(number=abs(base_amount), currency=base_currency)
                     else:
-                        amount=Amount(number=sign * base_amount, currency=base_currency)
+                        amount=Amount(number=base_amount, currency=base_currency)
                         cost=None
 
-                    base_amount_total += sign * base_amount
+                    base_amount_total += base_amount
                         
                     entry = ICScardsEntry(account=account,
                                           date=date,
