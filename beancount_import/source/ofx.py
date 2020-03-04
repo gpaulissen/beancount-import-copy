@@ -642,9 +642,9 @@ class ParsedOfxStatement(object):
 
         dtend = stmtrs.find(re.compile('banktranlist'))
         if dtend:
-            dtend = dtend.find(re.compile('dtend'))
+            # Use find_child and not dtend.find().get_text()
+            dtend = find_child(dtend, 'dtend')
             if dtend:
-                dtend = dtend.get_text()
                 # The dtend text should be a date/time starting with %Y%m%d but some OFX files
                 # do not conform to a time but the date part is correct.
                 # Since we are only interested in the date, just use the first 8 characters
