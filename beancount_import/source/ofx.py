@@ -620,6 +620,37 @@ class ParsedOfxStatement(object):
 
         self.ofx_id = account_ofx_id = (org, self.broker_id, account_id)
 
+        # Note DTASOF and DTEND
+        #
+        # GJP 2020-03-04 The end balance is actually the end balance as of today
+        #
+        # See the discussion on https://github.com/odoo/odoo/issues/3003
+        #
+        # ----------------------------------------------------------------------
+        # You're right, I did just RTFM and the balance provided in OFX
+        # statements is described as "The current ledger balance".
+        # 
+        # However, there might be a way to to get the starting/ending balance 
+        # that is better than nothing. In an OFX document, each list of 
+        # transactions (BANKTRANLIST) has an "exclusive ending date" (DTEND), 
+        # and the ledger balance (LEDGERBAL) date is specified (DTASOF).
+        # ----------------------------------------------------------------------
+        #
+        # What this means is that we probably should only show the balance if
+        # both DTEND and DTASOF are the same.
+
+        dtend = stmtrs.find(re.compile('banktranlist'))
+        if dtend:
+            dtend = dtend.find(re.compile('dtend'))
+            if dtend:
+                dtend = dtend.get_text()
+                # The dtend text should be a date/time starting with %Y%m%d but some OFX files
+                # do not conform to a time but the date part is correct.
+                # Since we are only interested in the date, just use the first 8 characters
+                # and add 000000
+                dtend = parse_ofx_time(dtend[:8] + "000000").date()
+                assert dtend is not None, "dtend should not be None"
+
         for invtranlist in stmtrs.find_all(re.compile('invtranlist|banktranlist')):
             for tran in invtranlist.find_all(
                     re.compile(
@@ -677,9 +708,11 @@ class ParsedOfxStatement(object):
             if not bal_amount_str.strip(): continue
             bal_amount = D(bal_amount_str)
             date = find_child(bal, 'dtasof', parse_ofx_time).date()
-            raw_cash_balance_entries.append(
-                RawCashBalanceEntry(
-                    date=date, number=bal_amount, filename=filename))
+            # See Note DTASOF and DTEND
+            if dtend is None or dtend == date:
+                raw_cash_balance_entries.append(
+                    RawCashBalanceEntry(
+                        date=date, number=bal_amount, filename=filename))
 
 
         for invposlist in stmtrs.find_all('invposlist'):
