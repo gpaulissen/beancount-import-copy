@@ -420,6 +420,7 @@ import os
 import collections
 import datetime
 import tempfile
+import sys
 
 import bs4
 from atomicwrites import atomic_write
@@ -648,8 +649,12 @@ class ParsedOfxStatement(object):
                 # do not conform to a time but the date part is correct.
                 # Since we are only interested in the date, just use the first 8 characters
                 # and add 000000
-                dtend = parse_ofx_time(dtend[:8] + "000000").date()
-                assert dtend is not None, "dtend should not be None"
+                try:
+                    dtend = parse_ofx_time(dtend[:8] + "000000").date()
+                    assert dtend is not None, "dtend should not be None"
+                except ValueError as e:
+                    sys.stderr.write("The DTEND tag (%s) can not be converted to a date\n" % (dtend))
+                    dtend = None
 
         for invtranlist in stmtrs.find_all(re.compile('invtranlist|banktranlist')):
             for tran in invtranlist.find_all(
