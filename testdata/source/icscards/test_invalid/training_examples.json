@@ -1,10 +1,12 @@
 [
-  [
+	[
     {
       "amount": "-2.45 EUR",
-      "date": "2019-10-10",
+      "date": "2019-10-12",
       "key_value_pairs": {
-        "desc": "Starbucks, STARBUCKS STORE 12345 (US)"
+        "ofx_memo": "STARBUCKS STORE (US)",
+        "ofx_name": "Starbucks",
+        "ofx_type": "STMTTRN"
       },
       "source_account": "Liabilities:Credit-Card"
     },
@@ -13,9 +15,11 @@
   [
     {
       "amount": "-2.45 EUR",
-      "date": "2019-10-10",
+      "date": "2019-10-12",
       "key_value_pairs": {
-        "desc": "Starbucks, STARBUCKS STORE 12345 (US)"
+        "ofx_memo": "STARBUCKS STORE (US)",
+        "ofx_name": "Starbucks",
+        "ofx_type": "STMTTRN"
       },
       "source_account": "Liabilities:Credit-Card"
     },
@@ -24,9 +28,11 @@
   [
     {
       "amount": "-2.45 EUR",
-      "date": "2019-10-10",
+      "date": "2019-10-12",
       "key_value_pairs": {
-        "desc": "Starbucks, STARBUCKS STORE 12345 (US)"
+        "ofx_memo": "STARBUCKS STORE (US)",
+        "ofx_name": "Starbucks",
+        "ofx_type": "STMTTRN"
       },
       "source_account": "Liabilities:Credit-Card"
     },
@@ -35,9 +41,11 @@
   [
     {
       "amount": "66.88 EUR",
-      "date": "2019-11-27",
+      "date": "2019-11-28",
       "key_value_pairs": {
-        "desc": "IDEAL BETALING, DANK U"
+        "desc": "IDEAL BETALING, DANK U",
+        "ofx_memo": "IDEAL BETALING, DANK U",
+        "ofx_type": "STMTTRN"
       },
       "source_account": "Liabilities:Credit-Card"
     },
@@ -45,13 +53,15 @@
   ],
   [
     {
-      "amount": "-66.88 EUR",
+      "amount": "66.88 EUR",
       "date": "2019-12-02",
       "key_value_pairs": {
-        "desc": "NATIONAL FEDERAL DES:TRNSFR"
+        "desc": "IDEAL BETALING, DANK U",
+        "ofx_memo": "IDEAL BETALING, DANK U",
+        "ofx_type": "STMTTRN"
       },
-      "source_account": "Assets:Checking"
+      "source_account": "Liabilities:Credit-Card"
     },
-    "Liabilities:Credit-Card"
-  ]
+    "Assets:Checking"
+  ],
 ]
