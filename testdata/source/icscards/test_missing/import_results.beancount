@@ -1,479 +1,579 @@
 ;; date: 2019-08-21
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 7, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-7.99 EUR",
 ;               "date": "2019-08-21",
 ;               "key_value_pairs": {
-;                 "desc": "NETFLIX.COM, 866-579-7172 (NL)"
+;                 "ofx_memo": "866-579-7172 (NL)",
+;                 "ofx_name": "NETFLIX.COM",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-08-21 * "NETFLIX.COM" "866-579-7172 (NL)"
+2019-08-21 * "STMTTRN - NETFLIX.COM - 866-579-7172 (NL)"
   Liabilities:Credit-Card  -7.99 EUR
     date: 2019-08-21
-    source_desc: "NETFLIX.COM, 866-579-7172 (NL)"
+    ofx_fitid: "fb30df50e296a19867ea82edca38350ca31cbcdb"
+    ofx_memo: "866-579-7172 (NL)"
+    ofx_name: "NETFLIX.COM"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            7.99 EUR
 
 ;; date: 2019-08-26
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 9, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-88 EUR",
+;               "amount": "-88.00 EUR",
 ;               "date": "2019-08-26",
 ;               "key_value_pairs": {
-;                 "desc": "LEFG LES VOILES, LE POULIGUEN (FR)"
+;                 "ofx_memo": "LE POULIGUEN (FR)",
+;                 "ofx_name": "LEFG LES VOILES",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-08-26 * "LEFG LES VOILES" "LE POULIGUEN (FR)"
-  Liabilities:Credit-Card  -88 EUR
+2019-08-26 * "STMTTRN - LEFG LES VOILES - LE POULIGUEN (FR)"
+  Liabilities:Credit-Card  -88.00 EUR
     date: 2019-08-26
-    source_desc: "LEFG LES VOILES, LE POULIGUEN (FR)"
-  Expenses:FIXME            88 EUR
+    ofx_fitid: "b41089641690296b289025292c9e3445e965a5bf"
+    ofx_memo: "LE POULIGUEN (FR)"
+    ofx_name: "LEFG LES VOILES"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            88.00 EUR
 
 ;; date: 2019-08-27
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 8, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-101.33 EUR",
 ;               "date": "2019-08-27",
 ;               "key_value_pairs": {
-;                 "desc": "IBIS, PARIS (FR)"
+;                 "ofx_memo": "PARIS (FR)",
+;                 "ofx_name": "IBIS",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-08-27 * "IBIS" "PARIS (FR)"
+2019-08-27 * "STMTTRN - IBIS - PARIS (FR)"
   Liabilities:Credit-Card  -101.33 EUR
     date: 2019-08-27
-    source_desc: "IBIS, PARIS (FR)"
+    ofx_fitid: "ea6faf3d10794eb77451615b375fe3ddf7abb57c"
+    ofx_memo: "PARIS (FR)"
+    ofx_name: "IBIS"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            101.33 EUR
 
 ;; date: 2019-08-29
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 10, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-321.35 EUR",
 ;               "date": "2019-08-29",
 ;               "key_value_pairs": {
-;                 "desc": "HOTEL MERCURE, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "HOTEL MERCURE",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-08-29 * "HOTEL MERCURE" "MONTIGNY LE B (FR)"
+2019-08-29 * "STMTTRN - HOTEL MERCURE - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -321.35 EUR
     date: 2019-08-29
-    source_desc: "HOTEL MERCURE, MONTIGNY LE B (FR)"
+    ofx_fitid: "0d9a0e4a72a389f920aad64f5b350863c3b0a035"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "HOTEL MERCURE"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            321.35 EUR
 
 ;; date: 2019-09-01
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 6, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "1311.73 EUR",
 ;               "date": "2019-09-01",
 ;               "key_value_pairs": {
-;                 "desc": "IDEAL BETALING, DANK U"
+;                 "desc": "IDEAL BETALING, DANK U",
+;                 "ofx_memo": "IDEAL BETALING, DANK U",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-01 * "IDEAL BETALING, DANK U"
+2019-09-01 * "STMTTRN - IDEAL BETALING, DANK U"
   Liabilities:Credit-Card   1311.73 EUR
     date: 2019-09-01
-    source_desc: "IDEAL BETALING, DANK U"
+    ofx_fitid: "7f33580c7f7899c380a1f94198f626451971c2ee"
+    ofx_memo: "IDEAL BETALING, DANK U"
+    ofx_type: "STMTTRN"
   Expenses:FIXME           -1311.73 EUR
 
 ;; date: 2019-09-03
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 11, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-6.15 EUR",
 ;               "date": "2019-09-03",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, PARIS (FR)"
+;                 "ofx_memo": "PARIS (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-03 * "SNCF" "PARIS (FR)"
+2019-09-03 * "STMTTRN - SNCF - PARIS (FR)"
   Liabilities:Credit-Card  -6.15 EUR
     date: 2019-09-03
-    source_desc: "SNCF, PARIS (FR)"
+    ofx_fitid: "5cbd1fc271f5815f692734c1433a80235adbfc12"
+    ofx_memo: "PARIS (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            6.15 EUR
 
 ;; date: 2019-09-03
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 12, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-10 EUR",
+;               "amount": "-10.00 EUR",
 ;               "date": "2019-09-03",
 ;               "key_value_pairs": {
-;                 "desc": "SODEXO RENAISSA 4734012, 78GUYANCN6002 (FR)"
+;                 "ofx_memo": "78GUYANCN6002 (FR)",
+;                 "ofx_name": "SODEXO RENAISSA 4734012",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-03 * "SODEXO RENAISSA 4734012" "78GUYANCN6002 (FR)"
-  Liabilities:Credit-Card  -10 EUR
+2019-09-03 * "STMTTRN - SODEXO RENAISSA 4734012 - 78GUYANCN6002 (FR)"
+  Liabilities:Credit-Card  -10.00 EUR
     date: 2019-09-03
-    source_desc: "SODEXO RENAISSA 4734012, 78GUYANCN6002 (FR)"
-  Expenses:FIXME            10 EUR
+    ofx_fitid: "e2d68e728ea25b26a97f0e5b0c4ead6b39d41cdb"
+    ofx_memo: "78GUYANCN6002 (FR)"
+    ofx_name: "SODEXO RENAISSA 4734012"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            10.00 EUR
 
 ;; date: 2019-09-04
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 13, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-5.05 EUR",
 ;               "date": "2019-09-04",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-04 * "SNCF" "MONTIGNY LE B (FR)"
+2019-09-04 * "STMTTRN - SNCF - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -5.05 EUR
     date: 2019-09-04
-    source_desc: "SNCF, MONTIGNY LE B (FR)"
+    ofx_fitid: "ae7943536c047f31e6d6e3a48e313c15b57e780e"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            5.05 EUR
 
 ;; date: 2019-09-04
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 14, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-5.05 EUR",
+;               "amount": "-12.00 EUR",
 ;               "date": "2019-09-04",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "2048286 (SURESNES)",
+;                 "ofx_name": "L OASIS",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-04 * "SNCF" "MONTIGNY LE B (FR)"
-  Liabilities:Credit-Card  -5.05 EUR
+2019-09-04 * "STMTTRN - L OASIS - 2048286 (SURESNES)"
+  Liabilities:Credit-Card  -12.00 EUR
     date: 2019-09-04
-    source_desc: "SNCF, MONTIGNY LE B (FR)"
-  Expenses:FIXME            5.05 EUR
-
-;; date: 2019-09-04
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 15, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-
-; features: [
-;             {
-;               "amount": "-12 EUR",
-;               "date": "2019-09-04",
-;               "key_value_pairs": {
-;                 "desc": "L OASIS         2048286, SURESNES (FR)"
-;               },
-;               "source_account": "Liabilities:Credit-Card"
-;             }
-;           ]
-2019-09-04 * "L OASIS         2048286" "SURESNES (FR)"
-  Liabilities:Credit-Card  -12 EUR
-    date: 2019-09-04
-    source_desc: "L OASIS         2048286, SURESNES (FR)"
-  Expenses:FIXME            12 EUR
+    ofx_fitid: "a7b00364d5c2abfd6b3c2b0651a5ef588d81f36c"
+    ofx_memo: "2048286 (SURESNES)"
+    ofx_name: "L OASIS"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            12.00 EUR
 
 ;; date: 2019-09-05
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 16, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-6.15 EUR",
 ;               "date": "2019-09-05",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-05 * "SNCF" "MONTIGNY LE B (FR)"
+2019-09-05 * "STMTTRN - SNCF - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -6.15 EUR
     date: 2019-09-05
-    source_desc: "SNCF, MONTIGNY LE B (FR)"
+    ofx_fitid: "d6e4fe36e1e4dc8dcb770d80f88c2f25af2ebfec"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            6.15 EUR
 
 ;; date: 2019-09-05
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 17, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-35.7 EUR",
+;               "amount": "-35.70 EUR",
 ;               "date": "2019-09-05",
 ;               "key_value_pairs": {
-;                 "desc": "SumUp  *Taxi bordeaux m, Port sainte f (FR)"
+;                 "ofx_memo": "Port sainte f (FR)",
+;                 "ofx_name": "SumUp *Taxi bordeaux m",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-05 * "SumUp  *Taxi bordeaux m" "Port sainte f (FR)"
-  Liabilities:Credit-Card  -35.7 EUR
+2019-09-05 * "STMTTRN - SumUp *Taxi bordeaux m - Port sainte f (FR)"
+  Liabilities:Credit-Card  -35.70 EUR
     date: 2019-09-05
-    source_desc: "SumUp  *Taxi bordeaux m, Port sainte f (FR)"
-  Expenses:FIXME            35.7 EUR
+    ofx_fitid: "392c8a34fde5ac0c9b5eddda2247c03c62f8596d"
+    ofx_memo: "Port sainte f (FR)"
+    ofx_name: "SumUp *Taxi bordeaux m"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            35.70 EUR
 
 ;; date: 2019-09-05
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 18, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-381.24 EUR",
 ;               "date": "2019-09-05",
 ;               "key_value_pairs": {
-;                 "desc": "HOTEL MERCURE, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "HOTEL MERCURE",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-05 * "HOTEL MERCURE" "MONTIGNY LE B (FR)"
+2019-09-05 * "STMTTRN - HOTEL MERCURE - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -381.24 EUR
     date: 2019-09-05
-    source_desc: "HOTEL MERCURE, MONTIGNY LE B (FR)"
+    ofx_fitid: "ed6839c34d73d730a151cfcdfa80d492a0c238c4"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "HOTEL MERCURE"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            381.24 EUR
 
 ;; date: 2019-09-05
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 19, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-10.96 EUR",
 ;               "date": "2019-09-05",
 ;               "key_value_pairs": {
-;                 "desc": "NEWREST WAGONS LITS FRANC, PARIS (FR)"
+;                 "ofx_memo": "PARIS (FR)",
+;                 "ofx_name": "NEWREST WAGONS LITS FRANC",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-05 * "NEWREST WAGONS LITS FRANC" "PARIS (FR)"
+2019-09-05 * "STMTTRN - NEWREST WAGONS LITS FRANC - PARIS (FR)"
   Liabilities:Credit-Card  -10.96 EUR
     date: 2019-09-05
-    source_desc: "NEWREST WAGONS LITS FRANC, PARIS (FR)"
+    ofx_fitid: "8a08a91dc8447cf872bbcdc7da2b3c21ce48524c"
+    ofx_memo: "PARIS (FR)"
+    ofx_name: "NEWREST WAGONS LITS FRANC"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            10.96 EUR
 
 ;; date: 2019-09-07
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 20, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-4.45 EUR",
 ;               "date": "2019-09-07",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, PARIS 8 (FR)"
+;                 "ofx_memo": "PARIS 8 (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-07 * "SNCF" "PARIS 8 (FR)"
+2019-09-07 * "STMTTRN - SNCF - PARIS 8 (FR)"
   Liabilities:Credit-Card  -4.45 EUR
     date: 2019-09-07
-    source_desc: "SNCF, PARIS 8 (FR)"
+    ofx_fitid: "a39a62886d844d89440e44652ccb7ecd4ec36398"
+    ofx_memo: "PARIS 8 (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            4.45 EUR
 
 ;; date: 2019-09-08
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 21, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-1.95 EUR",
 ;               "date": "2019-09-08",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, GARCHES (FR)"
+;                 "ofx_memo": "GARCHES (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-08 * "SNCF" "GARCHES (FR)"
+2019-09-08 * "STMTTRN - SNCF - GARCHES (FR)"
   Liabilities:Credit-Card  -1.95 EUR
     date: 2019-09-08
-    source_desc: "SNCF, GARCHES (FR)"
+    ofx_fitid: "a3b5fd7ff04e27545620591c8dc7d481847a403a"
+    ofx_memo: "GARCHES (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            1.95 EUR
 
 ;; date: 2019-09-08
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 22, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-4.45 EUR",
 ;               "date": "2019-09-08",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, LA CELLE ST C (FR)"
+;                 "ofx_memo": "LA CELLE ST C (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-08 * "SNCF" "LA CELLE ST C (FR)"
+2019-09-08 * "STMTTRN - SNCF - LA CELLE ST C (FR)"
   Liabilities:Credit-Card  -4.45 EUR
     date: 2019-09-08
-    source_desc: "SNCF, LA CELLE ST C (FR)"
+    ofx_fitid: "5c5f0eed12a16080d5a5c09defbd573e00927997"
+    ofx_memo: "LA CELLE ST C (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            4.45 EUR
 
 ;; date: 2019-09-09
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 23, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-50 EUR",
+;               "amount": "-50.00 EUR",
 ;               "date": "2019-09-09",
 ;               "key_value_pairs": {
-;                 "desc": "LE JEAN BAPTISTE, BOULOGNE BILL (FR)"
+;                 "ofx_memo": "BOULOGNE BILL (FR)",
+;                 "ofx_name": "LE JEAN BAPTISTE",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-09 * "LE JEAN BAPTISTE" "BOULOGNE BILL (FR)"
-  Liabilities:Credit-Card  -50 EUR
+2019-09-09 * "STMTTRN - LE JEAN BAPTISTE - BOULOGNE BILL (FR)"
+  Liabilities:Credit-Card  -50.00 EUR
     date: 2019-09-09
-    source_desc: "LE JEAN BAPTISTE, BOULOGNE BILL (FR)"
-  Expenses:FIXME            50 EUR
+    ofx_fitid: "adb9917770955fd4d8883203ce48b95806fb6725"
+    ofx_memo: "BOULOGNE BILL (FR)"
+    ofx_name: "LE JEAN BAPTISTE"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            50.00 EUR
 
 ;; date: 2019-09-09
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 24, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-15 EUR",
+;               "amount": "-15.00 EUR",
 ;               "date": "2019-09-09",
 ;               "key_value_pairs": {
-;                 "desc": "GOLF EN VILLE   4365535, 92SAINT CLOUD (FR)"
+;                 "ofx_memo": "92SAINT CLOUD (FR)",
+;                 "ofx_name": "GOLF EN VILLE 4365535",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-09 * "GOLF EN VILLE   4365535" "92SAINT CLOUD (FR)"
-  Liabilities:Credit-Card  -15 EUR
+2019-09-09 * "STMTTRN - GOLF EN VILLE 4365535 - 92SAINT CLOUD (FR)"
+  Liabilities:Credit-Card  -15.00 EUR
     date: 2019-09-09
-    source_desc: "GOLF EN VILLE   4365535, 92SAINT CLOUD (FR)"
-  Expenses:FIXME            15 EUR
+    ofx_fitid: "8abe82bdfe018b6a9a739124fb9e9fc15f983175"
+    ofx_memo: "92SAINT CLOUD (FR)"
+    ofx_name: "GOLF EN VILLE 4365535"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            15.00 EUR
 
 ;; date: 2019-09-09
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 25, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-1.95 EUR",
 ;               "date": "2019-09-09",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, LA CELLE ST C (FR)"
+;                 "ofx_memo": "LA CELLE ST C (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-09 * "SNCF" "LA CELLE ST C (FR)"
+2019-09-09 * "STMTTRN - SNCF - LA CELLE ST C (FR)"
   Liabilities:Credit-Card  -1.95 EUR
     date: 2019-09-09
-    source_desc: "SNCF, LA CELLE ST C (FR)"
+    ofx_fitid: "44b937cdfa6661b77d032f9d24b164dcb9e6a94c"
+    ofx_memo: "LA CELLE ST C (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            1.95 EUR
 
 ;; date: 2019-09-09
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 26, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
-;               "amount": "-35 EUR",
+;               "amount": "-35.00 EUR",
 ;               "date": "2019-09-09",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF INTERNET, PARIS 12 (FR)"
+;                 "ofx_memo": "PARIS 12 (FR)",
+;                 "ofx_name": "SNCF INTERNET",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-09 * "SNCF INTERNET" "PARIS 12 (FR)"
-  Liabilities:Credit-Card  -35 EUR
+2019-09-09 * "STMTTRN - SNCF INTERNET - PARIS 12 (FR)"
+  Liabilities:Credit-Card  -35.00 EUR
     date: 2019-09-09
-    source_desc: "SNCF INTERNET, PARIS 12 (FR)"
-  Expenses:FIXME            35 EUR
+    ofx_fitid: "3454da45d11efc21e163caea04e3b9147018ffac"
+    ofx_memo: "PARIS 12 (FR)"
+    ofx_name: "SNCF INTERNET"
+    ofx_type: "STMTTRN"
+  Expenses:FIXME            35.00 EUR
 
 ;; date: 2019-09-09
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 27, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-3.31 EUR",
 ;               "date": "2019-09-09",
 ;               "key_value_pairs": {
-;                 "desc": "NEWREST WAGONS LITS FRANC, PARIS (FR)"
+;                 "ofx_memo": "PARIS (FR)",
+;                 "ofx_name": "NEWREST WAGONS LITS FRANC",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-09 * "NEWREST WAGONS LITS FRANC" "PARIS (FR)"
+2019-09-09 * "STMTTRN - NEWREST WAGONS LITS FRANC - PARIS (FR)"
   Liabilities:Credit-Card  -3.31 EUR
     date: 2019-09-09
-    source_desc: "NEWREST WAGONS LITS FRANC, PARIS (FR)"
+    ofx_fitid: "c5c15077b4b6507de0d7e6241fd85aed2d520e14"
+    ofx_memo: "PARIS (FR)"
+    ofx_name: "NEWREST WAGONS LITS FRANC"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            3.31 EUR
 
 ;; date: 2019-09-12
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 28, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-6.15 EUR",
 ;               "date": "2019-09-12",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, PARIS (FR)"
+;                 "ofx_memo": "PARIS (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-12 * "SNCF" "PARIS (FR)"
+2019-09-12 * "STMTTRN - SNCF - PARIS (FR)"
   Liabilities:Credit-Card  -6.15 EUR
     date: 2019-09-12
-    source_desc: "SNCF, PARIS (FR)"
+    ofx_fitid: "f84c529923fb6f8fcb16d6c561e98f2b4327e052"
+    ofx_memo: "PARIS (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            6.15 EUR
 
 ;; date: 2019-09-13
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 29, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-201.17 EUR",
 ;               "date": "2019-09-13",
 ;               "key_value_pairs": {
-;                 "desc": "MERCURE ST QUENT, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "MERCURE ST QUENT",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-13 * "MERCURE ST QUENT" "MONTIGNY LE B (FR)"
+2019-09-13 * "STMTTRN - MERCURE ST QUENT - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -201.17 EUR
     date: 2019-09-13
-    source_desc: "MERCURE ST QUENT, MONTIGNY LE B (FR)"
+    ofx_fitid: "3698c9697f60a49f8336fb199af06bdbb62e969b"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "MERCURE ST QUENT"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            201.17 EUR
 
 ;; date: 2019-09-13
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 105, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
 ;               "amount": "-6.15 EUR",
 ;               "date": "2019-09-13",
 ;               "key_value_pairs": {
-;                 "desc": "SNCF, MONTIGNY LE B (FR)"
+;                 "ofx_memo": "MONTIGNY LE B (FR)",
+;                 "ofx_name": "SNCF",
+;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-13 * "SNCF" "MONTIGNY LE B (FR)"
+2019-09-13 * "STMTTRN - SNCF - MONTIGNY LE B (FR)"
   Liabilities:Credit-Card  -6.15 EUR
     date: 2019-09-13
-    source_desc: "SNCF, MONTIGNY LE B (FR)"
+    ofx_fitid: "579ed61df7281dbe064ad2907ec10fe6720d593a"
+    ofx_memo: "MONTIGNY LE B (FR)"
+    ofx_name: "SNCF"
+    ofx_type: "STMTTRN"
   Expenses:FIXME            6.15 EUR
 
 ;; date: 2019-09-17
-;; info: {"filename": "<testdata>/icscards_missing.xlsx", "line": 4, "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+;; info: {"filename": "<testdata>/icscards_missing.txt.ofx", "type": "application/x-ofx"}
 
 2019-09-17 balance Liabilities:Credit-Card                         -1320.55 EUR
