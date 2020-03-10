@@ -9,12 +9,7 @@ testdata_dir = os.path.realpath(
         os.path.dirname(__file__), '..', '..', 'testdata', 'source', 'icscards'))
 
 examples = [
-    ('test_balance_wrong', 'icscards_balance_wrong.txt'),
     ('test_basic', 'icscards.txt'),
-    ('test_big', 'icscards_big.txt'),
-    ('test_invalid', 'icscards.txt'),
-    ('test_training_examples', 'icscards.txt'),
-    ('test_missing', 'icscards_missing.txt'),
 ]
 
 
