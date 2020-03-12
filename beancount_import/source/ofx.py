@@ -31,16 +31,32 @@ Duplicate transactions, as determined by the FITID field, are automatically
 excluded.  Therefore, if downloading manually, you should just ensure that there
 are no gaps in the date ranges selected; overlap will not cause any problems.
 
+Converting to OFX file
+======================
+
+Thanks to the ofxstatement project on GitHub there are several converters to
+OFX.  The module beancount_import.source.ofx contains a function convert2ofx
+to convert files to OFX.  Its parameters are: input_file_type, filenames and
+force. The input files are converted to a hidden file (hence prefixed by a
+dot) and suffixed with .ofx. So x.pdf becomes .x.pdf.ofx. There is no need to
+store these converted OFX files in your repository.
+
+To use the function:
+
+    from beancount_import.source.ofx import convert2ofx
+
 Specifying the source to beancount_import
 =========================================
 
 Within your Python script for invoking beancount_import, you might use an
 expression like the following to specify the ofx source:
 
+
     dict(module='beancount_import.source.ofx',
          ofx_filenames=(
              glob.glob(os.path.join(journal_dir, 'data/institution1/*/*.ofx'))
              + glob.glob(os.path.join(journal_dir, 'data/institution2/*/*.ofx'))
+             + convert2ofx('mt940', glob.glob(os.path.join(journal_dir, 'data/institution3/*/*.mt940')))
          ),
          cache_filename=os.path.join(journal_dir, 'data/ofx_cache.pickle'),
     )
@@ -50,7 +66,7 @@ where `journal_dir` refers to the financial/ directory.
 The `cache_filename` key is optional, but is recommended to speed up parsing if
 you have a large amount of OFX data.  When using the `cache_filename` option,
 adding and deleting OFX files is fine, but if you modify existing OFX files, you
-must delete the cahe file manually.
+must delete the cache file manually.
 
 Specifying individual accounts
 ==============================
@@ -421,6 +437,7 @@ import collections
 import datetime
 import tempfile
 import sys
+from subprocess import check_call, STDOUT
 
 import bs4
 from atomicwrites import atomic_write
@@ -1443,6 +1460,28 @@ class OfxSource(Source):
 def load(spec, log_status):
     return OfxSource(log_status=log_status, **spec)
 
+def convert2ofx(input_file_type: str,
+                filenames: List[str],
+                force: Optional[bool] = False):
+    ofx_filenames = []
+    for file in [os.path.realpath(x) for x in filenames]:
+        head, tail = os.path.split(file)
+        ofx_file = os.path.join(head, '.' + tail + '.ofx')
+        ofx_file_newer = False
+        try:
+            if not(force):
+                if os.stat(ofx_file).st_mtime > os.stat(file).st_mtime:
+                    ofx_file_newer = True
+        except:
+            pass
+
+        if not(ofx_file_newer):
+            # Create a process for ofxstatement
+            ofxstatement = ["ofxstatement", "convert", "-t", input_file_type]
+            ofxstatement.extend([file, ofx_file])
+            check_call(ofxstatement, stderr=STDOUT)
+        ofx_filenames.append(ofx_file)
+    return ofx_filenames
 
 if __name__ == '__main__':
     import argparse

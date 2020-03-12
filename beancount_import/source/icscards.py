@@ -1,54 +1,52 @@
 # -*-coding: utf-8-*-
 # coding=utf-8
 
-"""ICScards.nl transaction and balance source.
+"""ofxstatement transaction and balance source.
+
+This module will convert files to (hidden) OFX files and will then process
+those OFX files.  The OFX files will have the name of the input file with a
+dot prefix and an .ofx suffix.  They will be created unless they are newer
+than their input file, just like make does.
+
 
 Data format
 ===========
 
-To use, first download transaction (and balance) data into a directory on the
-filesystem.
+See the corresponding section in ofx.py.
 
-The transactions files are in PDF format and the oxfconverter plugin
-nl-icscards is used to create an OFX file from it.
-
-So the suggested workflow is:
-1) Download the transaction statements from https://icscards.nl.
-2) Place those PDF files in the data directory structure (see below).
-3) Then this beancount_import module will take care of the rest.
-
-You might have a directory structure like:
-
-    financial/
-      data/
-        icscards/
-          account_id/
-            Rekeningoverzicht-54280230027-2020-01.pdf
-
-
-The `Rekeningoverzicht-54280230027-2020-01.pdf` file should be a PDF file
-containing all downloaded transactions, in the normal PDF download format
-provided by ICScards.  See the `testdata/source/icscards` directory for an
-example.
 
 Specifying the source to beancount_import
 =========================================
 
 Within your Python script for invoking beancount_import, you might use an
-expression like the following to specify the icscards source:
+expression like the following to specify the ofxstatement source:
 
-    dict(module='beancount_import.source.icscards',
+    dict(module='beancount_import.source.ofxstatement',
          filenames=(
-             glob.glob(os.path.join(journal_dir, 'data/icscards/*/*.pdf'))
+             glob.glob(os.path.join(journal_dir, 'data/institution1/*/*.pdf'))
+             + glob.glob(os.path.join(journal_dir, 'data/institution2/*/*.csv'))
          ),
+         cache_filename=os.path.join(journal_dir, 'data/ofxstatement_cache.pickle'),
     )
 
 where `journal_dir` refers to the financial/ directory.
 
+The `cache_filename` key is optional, but is recommended to speed up parsing if
+you have a large amount of OFX data.  When using the `cache_filename` option,
+adding and deleting OFX files is fine, but if you modify existing OFX files, you
+must delete the cache file manually.
+
+
+Specifying individual accounts
+==============================
+
+See the corresponding section in ofx.py.
+
+
 Imported transaction format
 ===========================
 
-See the ofx.py module.
+See the corresponding section in ofx.py.
 
 """
 
@@ -58,27 +56,11 @@ from subprocess import check_call, STDOUT
 
 from . import ofx
 
-class ICScardsSource(ofx.OfxSource):
+class OfxStatementSource(ofx.OfxSource):
     def __init__(self,
                  filenames: List[str],
                  **kwargs) -> None:
-        ofx_filenames = []
-        for file in [os.path.realpath(x) for x in filenames]:
-            ofx_file = file + '.ofx'
-            ofx_file_newer = False
-            try:
-                if os.stat(ofx_file).st_mtime > os.stat(file).st_mtime:
-                    ofx_file_newer = True
-            except:
-                pass
-
-            if not(ofx_file_newer):
-                # Create a process for ofxstatement
-                ofxstatement = ["ofxstatement", "convert", "-t", "nl-icscards"]
-                ofxstatement.extend([file, ofx_file])
-                check_call(ofxstatement, stderr=STDOUT)
-            ofx_filenames.append(ofx_file)
-
+        ofx_filenames = ofx.convert2ofx("nl-icscards", filenames)
         super().__init__(ofx_filenames=ofx_filenames, **kwargs)
 
     @property
@@ -86,4 +68,4 @@ class ICScardsSource(ofx.OfxSource):
         return 'icscards'
 
 def load(spec, log_status):
-    return ICScardsSource(log_status=log_status, **spec)
+    return OfxStatementSource(log_status=log_status, **spec)

@@ -52,6 +52,7 @@ setup(
         'atomicwrites>=1.3.0',
         'jsonschema',
         'watchdog',
+        'ofxstatement',
     ],
     test_requirements=[
         'pytest',

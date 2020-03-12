@@ -10,6 +10,9 @@ testdata_dir = os.path.realpath(
 
 examples = [
     ('test_basic', 'icscards.txt'),
+    ('test_big', 'icscards_big.txt'),
+    ('test_equal_transactions', 'icscards_equal_transactions.txt'),
+    ('test_error', 'icscards_error.txt'),
 ]
 
 

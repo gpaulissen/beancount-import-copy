@@ -1,5 +1,5 @@
 ;; date: 2019-10-12
-;; info: {"filename": "<testdata>/icscards.txt.ofx", "type": "application/x-ofx"}
+;; info: {"filename": "<testdata>/.icscards.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
@@ -23,7 +23,7 @@
   Expenses:FIXME            2.45 EUR
 
 ;; date: 2019-11-28
-;; info: {"filename": "<testdata>/icscards.txt.ofx", "type": "application/x-ofx"}
+;; info: {"filename": "<testdata>/.icscards.txt.ofx", "type": "application/x-ofx"}
 
 ; features: [
 ;             {
@@ -46,6 +46,6 @@
   Expenses:FIXME           -66.88 EUR
 
 ;; date: 2019-12-17
-;; info: {"filename": "<testdata>/icscards.txt.ofx", "type": "application/x-ofx"}
+;; info: {"filename": "<testdata>/.icscards.txt.ofx", "type": "application/x-ofx"}
 
 2019-12-17 balance Liabilities:Credit-Card                         -1737.12 EUR
