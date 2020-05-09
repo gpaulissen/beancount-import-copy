@@ -22,7 +22,7 @@
     ofx_type: "STMTTRN"
   Expenses:FIXME            16.85 AUD
 
-;; date: 2013-12-15
+;; date: 2013-12-16
 ;; info: {"filename": "<testdata>/suncorp.ofx", "type": "application/x-ofx"}
 
-2013-12-15 balance Assets:Checking:Suncorp                         1234.12 AUD
+2013-12-16 balance Assets:Checking:Suncorp                         1234.12 AUD

@@ -51,7 +51,6 @@ Specifying the source to beancount_import
 Within your Python script for invoking beancount_import, you might use an
 expression like the following to specify the ofx source:
 
-
     dict(module='beancount_import.source.ofx',
          ofx_filenames=(
              glob.glob(os.path.join(journal_dir, 'data/institution1/*/*.ofx'))
@@ -638,6 +637,7 @@ class ParsedOfxStatement(object):
 
         self.ofx_id = account_ofx_id = (org, self.broker_id, account_id)
 
+        # ---------------------------------------------------------------------
         # Note DTASOF and DTEND
         #
         # GJP 2020-03-04 The end balance is actually the end balance as of today
@@ -655,23 +655,35 @@ class ParsedOfxStatement(object):
         # ----------------------------------------------------------------------
         #
         # What this means is that we probably should only show the balance if
-        # both DTEND and DTASOF are the same.
+        # both DTEND and DTASOF are the same. However in that case we see that
+        # sometimes DTASOF is not the exclusive (as a Beancount balance date
+        # should be) but the inclusive date.  To handle this situation we just
+        # compare the maximal DTTRADE|DTPOSTED with DTASOF. If they are equal
+        # it means DTASOF is not exclusive so we add 1 day. If DTASOF is
+        # greater we can use DTASOF. If DTASOF is smaller there is a problem
+        # and we ignore it.
+        # ---------------------------------------------------------------------
+        
+        CHECK_DTASOF = True  # False is the old behaviour
 
-        dtend = stmtrs.find(re.compile('banktranlist'))
-        if dtend:
-            # Use find_child and not dtend.find().get_text()
-            dtend = find_child(dtend, 'dtend')
+        if CHECK_DTASOF:
+            dtend = stmtrs.find(re.compile('banktranlist'))
             if dtend:
-                # The dtend text should be a date/time starting with %Y%m%d but some OFX files
-                # do not conform to a time but the date part is correct.
-                # Since we are only interested in the date, just use the first 8 characters
-                # and add 000000
-                try:
-                    dtend = parse_ofx_time(dtend[:8] + "000000").date()
-                    assert dtend is not None, "dtend should not be None"
-                except ValueError as e:
-                    sys.stderr.write("The DTEND tag (%s) can not be converted to a date\n" % (dtend))
-                    dtend = None
+                # Use find_child and not dtend.find().get_text()
+                dtend = find_child(dtend, 'dtend')
+                if dtend:
+                    # The dtend text should be a date/time starting with %Y%m%d but some OFX files
+                    # do not conform to a time but the date part is correct.
+                    # Since we are only interested in the date, just use the first 8 characters
+                    # and add 000000
+                    try:
+                        dtend = parse_ofx_time(dtend[:8] + "000000").date()
+                        assert dtend is not None, "dtend should not be None"
+                    except ValueError as e:
+                        sys.stderr.write("The DTEND tag (%s) can not be converted to a date\n" % (dtend))
+                        dtend = None
+        else:
+            pass
 
         for invtranlist in stmtrs.find_all(re.compile('invtranlist|banktranlist')):
             for tran in invtranlist.find_all(
@@ -729,12 +741,28 @@ class ParsedOfxStatement(object):
             bal_amount_str = find_child(bal, 'balamt')
             if not bal_amount_str.strip(): continue
             bal_amount = D(bal_amount_str)
-            date = find_child(bal, 'dtasof', parse_ofx_time).date()
+            dtasof = find_child(bal, 'dtasof', parse_ofx_time).date()            
             # See Note DTASOF and DTEND
-            if dtend is None or dtend == date:
-                raw_cash_balance_entries.append(
-                    RawCashBalanceEntry(
-                        date=date, number=bal_amount, filename=filename))
+            if CHECK_DTASOF:
+                if dtend is not None and dtend != dtasof:
+                    continue
+                max_date = max([raw.date for raw in raw_transactions]) if len(raw_transactions) > 0 else None
+                if max_date is None:
+                    continue
+                elif max_date == dtasof:
+                    # dtasof is inclusive: add 1 day for exclusivity as demanded by a beancount balance
+                    dtasof += datetime.timedelta(days=1)
+                elif dtasof > max_date:
+                    # dtasof is exclusive: okay
+                    pass
+                else:
+                    # dtasof is exclusive: error
+                    continue
+            else:
+                pass            
+            raw_cash_balance_entries.append(
+                RawCashBalanceEntry(
+                    date=dtasof, number=bal_amount, filename=filename))
 
 
         for invposlist in stmtrs.find_all('invposlist'):
@@ -825,8 +853,10 @@ class ParsedOfxStatement(object):
         def get_subaccount_cash(inv401ksource: Optional[str] = None) -> str:
             return get_subaccount(inv401ksource, 'Cash' if has_securities else None)
 
+        # GJP 2020-01-18  The CHECKNUM field is not numeric as described in the OFX 2.2 specification
+        CHECKNUM_IS_NUMERIC = False
+
         for raw in self.raw_transactions:
-            checknum_is_numeric = False # GJP 2020-01-18  The CHECKNUM field is not numeric as described in the OFX specification
             match_key = (ofx_id, raw.date, raw.fitid)
             if has_real_cash_account:
                 if has_securities and match_key in matched_transactions:
@@ -894,7 +924,7 @@ class ParsedOfxStatement(object):
                 posting_meta[OFX_NAME_KEY] = name
 
             if raw.checknum:
-                if not checknum_is_numeric:
+                if not CHECKNUM_IS_NUMERIC:
                     posting_meta[CHECK_KEY] = raw.checknum
                 else:
                     stripped_checknum = raw.checknum.lstrip('0')
