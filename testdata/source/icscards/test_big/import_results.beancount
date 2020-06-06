@@ -906,3 +906,8 @@
     ofx_name: "SNCF OUIGO"
     ofx_type: "STMTTRN"
   Expenses:FIXME            49.00 EUR
+
+;; date: 2019-01-17
+;; info: {"filename": "<testdata>/.icscards_big.txt.ofx", "type": "application/x-ofx"}
+
+2019-01-17 balance Liabilities:Credit-Card                         -1156.34 EUR

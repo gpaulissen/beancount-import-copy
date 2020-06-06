@@ -20,3 +20,8 @@
     ofx_memo: "SOME MEMO"
     ofx_type: "STMTTRN"
   Expenses:FIXME            5.50 AUD
+
+;; date: 2017-05-10
+;; info: {"filename": "<testdata>/anzcc.ofx", "type": "application/x-ofx"}
+
+2017-05-10 balance Liabilities:Credit-Card                         -123.45 AUD

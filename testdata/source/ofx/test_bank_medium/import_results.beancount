@@ -38,7 +38,6 @@
 ;           ]
 2009-04-02 * "STMTTRN - MISCELLANEOUS PAYMENTS;Joe's Bald Hairstyles"
   Assets:Checking  -316.67 CAD
-    check: "0"
     date: 2009-04-02
     ofx_fitid: "0000123456782009040200004"
     ofx_memo: "MISCELLANEOUS PAYMENTS;Joe's Bald Hairstyles"
@@ -67,3 +66,8 @@
     ofx_memo: "POS MERCHANDISE;CONNIE'S HAIR D"
     ofx_type: "STMTTRN"
   Expenses:FIXME    22.00 CAD
+
+;; date: 2009-05-23
+;; info: {"filename": "<testdata>/bank_medium.ofx", "type": "application/x-ofx"}
+
+2009-05-23 balance Assets:Checking                                 382.34 CAD

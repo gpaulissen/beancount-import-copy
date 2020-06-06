@@ -44,3 +44,8 @@
     ofx_memo: "IDEAL BETALING, DANK U"
     ofx_type: "STMTTRN"
   Expenses:FIXME           -66.88 EUR
+
+;; date: 2019-12-17
+;; info: {"filename": "<testdata>/.icscards.txt.ofx", "type": "application/x-ofx"}
+
+2019-12-17 balance Liabilities:Credit-Card                         -1737.12 EUR

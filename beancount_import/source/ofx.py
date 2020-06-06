@@ -430,7 +430,7 @@ of the manually created postings, as shown below:
 
 import pickle
 import re
-from typing import Set, Tuple, Any, Dict, Union, List, Optional, NamedTuple
+from typing import Set, Tuple, Any, Dict, Union, List, Optional, NamedTuple, Callable
 import os
 import collections
 import datetime
@@ -614,11 +614,12 @@ RELATED_ACCOUNT_KEYS = ['aftertax_account', 'pretax_account', 'match_account']
 TOLERANCE = 0.05
 
 class ParsedOfxStatement(object):
-    def __init__(self, seen_fitids, filename, securities_map, org, stmtrs):
+    def __init__(self, seen_fitids, filename, securities_map, org, stmtrs, checknum_numeric=True, check_balance=False):
         filename = os.path.abspath(filename)
         self.filename = filename
         self.securities_map = securities_map
         self.org = org
+        self.checknum_numeric = checknum_numeric
         account_id = self.account_id = find_child(stmtrs, 'acctid')
         self.broker_id = find_child(stmtrs, 'brokerid') or ''
 
@@ -657,7 +658,7 @@ class ParsedOfxStatement(object):
         # ---------------------------------------------------------------------
         # Note about abuse of DTEND.
         #
-        # GJP 2020-06-06 Some banks do not use DTEND as they should.
+        # GJP 2020-06-06 For some banks DTEND is not exclusive.
         #
         # From the OFX 2.2 specification:
         # =====================================================================
@@ -696,9 +697,7 @@ class ParsedOfxStatement(object):
         # proper start balance as of date DTASOF.
         # ---------------------------------------------------------------------        
         
-        CHECK_DTASOF = True  # False is the old behaviour
-
-        if CHECK_DTASOF:
+        if check_balance:  # False is old behavior
             dtend = stmtrs.find(re.compile('banktranlist'))
             if dtend:
                 # Use find_child and not dtend.find().get_text()
@@ -774,8 +773,8 @@ class ParsedOfxStatement(object):
             if not bal_amount_str.strip(): continue
             bal_amount = D(bal_amount_str)
             dtasof = find_child(bal, 'dtasof', parse_ofx_time).date()            
-            # See Note DTASOF and DTEND
-            if CHECK_DTASOF:
+            # See Note about DTASOF and DTEND
+            if check_balance:  # False is old behaviour
                 if dtend is not None and dtend < dtasof:
                     continue  # we can not determine a proper balance
                 dtasof_transaction_found = False
@@ -880,9 +879,6 @@ class ParsedOfxStatement(object):
         def get_subaccount_cash(inv401ksource: Optional[str] = None) -> str:
             return get_subaccount(inv401ksource, 'Cash' if has_securities else None)
 
-        # GJP 2020-01-18  The CHECKNUM field is not numeric as described in the OFX 2.2 specification
-        CHECKNUM_IS_NUMERIC = False
-
         for raw in self.raw_transactions:
             match_key = (ofx_id, raw.date, raw.fitid)
             if has_real_cash_account:
@@ -951,12 +947,14 @@ class ParsedOfxStatement(object):
                 posting_meta[OFX_NAME_KEY] = name
 
             if raw.checknum:
-                if not CHECKNUM_IS_NUMERIC:
-                    posting_meta[CHECK_KEY] = raw.checknum
-                else:
+                # GJP 2020-01-18
+                # The CHECKNUM field is not numeric as described in the OFX 2.2 specification
+                if self.checknum_numeric:  # Old behavior, not conform OFX
                     stripped_checknum = raw.checknum.lstrip('0')
                     if stripped_checknum:
                         posting_meta[CHECK_KEY] = D(stripped_checknum)
+                else:
+                    posting_meta[CHECK_KEY] = raw.checknum
 
             cash_transfer_transaction_amount = None
             if raw.trantype == 'INCOME' or raw.trantype == 'INVBANKTRAN' or raw.trantype == 'STMTTRN':
@@ -1263,7 +1261,7 @@ class ParsedOfxStatement(object):
 
 
 class ParsedOfxFile(object):
-    def __init__(self, seen_fitids, filename):
+    def __init__(self, seen_fitids, filename, checknum_numeric=True, check_balance=False):
         self.filename = filename
         parsed_statements = self.parsed_statements = []
 
@@ -1285,7 +1283,9 @@ class ParsedOfxFile(object):
                     filename=filename,
                     securities_map=securities_map,
                     org=org,
-                    stmtrs=stmtrs))
+                    stmtrs=stmtrs,
+                    checknum_numeric=checknum_numeric,
+                    check_balance=check_balance))
 
 
 def get_account_map(accounts):
@@ -1440,6 +1440,8 @@ class OfxSource(Source):
     def __init__(self,
                  ofx_filenames: List[str],
                  cache_filename: Optional[str] = None,
+                 checknum_numeric: Optional[Callable[[str], bool]] = None,
+                 check_balance: Optional[Callable[[str], bool]] = None,
                  **kwargs) -> None:
         super().__init__(**kwargs)
         self.ofx_filenames = [os.path.realpath(x) for x in ofx_filenames]
@@ -1471,7 +1473,10 @@ class OfxSource(Source):
                 continue
             self.log_status('ofx: loading %s' % filename)
             self.parsed_files.append(
-                ParsedOfxFile(self.source_fitids, filename))
+                ParsedOfxFile(self.source_fitids,
+                              filename,
+                              True if checknum_numeric is None else checknum_numeric(filename),
+                              False if check_balance is None else check_balance(filename)))
 
         if cache_filename is not None:
             cache_data = {
