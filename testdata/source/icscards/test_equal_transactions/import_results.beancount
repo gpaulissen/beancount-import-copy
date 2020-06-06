@@ -197,18 +197,18 @@
 ;               "amount": "-5.05 EUR",
 ;               "date": "2019-09-04",
 ;               "key_value_pairs": {
-;                 "ofx_memo": "MONTIGNY LE B (FR) #9",
+;                 "ofx_memo": "MONTIGNY LE B (FR) #2",
 ;                 "ofx_name": "SNCF",
 ;                 "ofx_type": "STMTTRN"
 ;               },
 ;               "source_account": "Liabilities:Credit-Card"
 ;             }
 ;           ]
-2019-09-04 * "STMTTRN - SNCF - MONTIGNY LE B (FR) #9"
+2019-09-04 * "STMTTRN - SNCF - MONTIGNY LE B (FR) #2"
   Liabilities:Credit-Card  -5.05 EUR
     date: 2019-09-04
-    ofx_fitid: "c0c165afe46f5afca0ffd0ef33b6365eb2f263a4"
-    ofx_memo: "MONTIGNY LE B (FR) #9"
+    ofx_fitid: "ae7943536c047f31e6d6e3a48e313c15b57e780e1-1"
+    ofx_memo: "MONTIGNY LE B (FR) #2"
     ofx_name: "SNCF"
     ofx_type: "STMTTRN"
   Expenses:FIXME            5.05 EUR

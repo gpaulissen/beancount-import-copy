@@ -428,6 +428,7 @@ of the manually created postings, as shown below:
 
 """
 
+import pdb
 import pickle
 import re
 from typing import Set, Tuple, Any, Dict, Union, List, Optional, NamedTuple, Callable
@@ -613,8 +614,14 @@ RELATED_ACCOUNT_KEYS = ['aftertax_account', 'pretax_account', 'match_account']
 # Tolerance allowed in transaction balancing.  In units of base currency used, e.g. USD.
 TOLERANCE = 0.05
 
+CHECKNUM_NUMERIC = True
+
+CHECK_BALANCE = False
+
+
 class ParsedOfxStatement(object):
-    def __init__(self, seen_fitids, filename, securities_map, org, stmtrs, checknum_numeric=True, check_balance=False):
+    def __init__(self, seen_fitids, filename, securities_map, org, stmtrs,
+                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE):
         filename = os.path.abspath(filename)
         self.filename = filename
         self.securities_map = securities_map
@@ -947,6 +954,7 @@ class ParsedOfxStatement(object):
                 posting_meta[OFX_NAME_KEY] = name
 
             if raw.checknum:
+                pdb.set_trace()
                 # GJP 2020-01-18
                 # The CHECKNUM field is not numeric as described in the OFX 2.2 specification
                 if self.checknum_numeric:  # Old behavior, not conform OFX
@@ -1261,7 +1269,8 @@ class ParsedOfxStatement(object):
 
 
 class ParsedOfxFile(object):
-    def __init__(self, seen_fitids, filename, checknum_numeric=True, check_balance=False):
+    def __init__(self, seen_fitids, filename,
+                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE):
         self.filename = filename
         parsed_statements = self.parsed_statements = []
 
@@ -1440,8 +1449,8 @@ class OfxSource(Source):
     def __init__(self,
                  ofx_filenames: List[str],
                  cache_filename: Optional[str] = None,
-                 checknum_numeric: Optional[Callable[[str], bool]] = None,
-                 check_balance: Optional[Callable[[str], bool]] = None,
+                 checknum_numeric: Callable[[str], bool] = lambda ofx_filename: CHECKNUM_NUMERIC,
+                 check_balance: Callable[[str], bool] = lambda ofx_filename: CHECK_BALANCE,
                  **kwargs) -> None:
         super().__init__(**kwargs)
         self.ofx_filenames = [os.path.realpath(x) for x in ofx_filenames]
@@ -1475,8 +1484,8 @@ class OfxSource(Source):
             self.parsed_files.append(
                 ParsedOfxFile(self.source_fitids,
                               filename,
-                              True if checknum_numeric is None else checknum_numeric(filename),
-                              False if check_balance is None else check_balance(filename)))
+                              checknum_numeric(filename),
+                              check_balance(filename)))
 
         if cache_filename is not None:
             cache_data = {

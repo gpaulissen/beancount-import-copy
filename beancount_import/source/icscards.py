@@ -61,7 +61,7 @@ class OfxStatementSource(ofx.OfxSource):
                  filenames: List[str],
                  **kwargs) -> None:
         ofx_filenames = ofx.convert2ofx("nl-icscards", filenames)
-        super().__init__(ofx_filenames=ofx_filenames, **kwargs)
+        super().__init__(ofx_filenames=ofx_filenames, checknum_numeric=lambda ofx_filename: False, **kwargs)
 
     @property
     def name(self):
