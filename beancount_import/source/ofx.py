@@ -638,13 +638,13 @@ class ParsedOfxStatement(object):
         self.ofx_id = account_ofx_id = (org, self.broker_id, account_id)
 
         # ---------------------------------------------------------------------
-        # Note DTASOF and DTEND
+        # Note about DTASOF and DTEND.
         #
-        # GJP 2020-03-04 The end balance is actually the end balance as of today
+        # GJP 2020-03-04 The end balance is actually the end balance as of now
         #
         # See the discussion on https://github.com/odoo/odoo/issues/3003
         #
-        # ----------------------------------------------------------------------
+        # =====================================================================
         # You're right, I did just RTFM and the balance provided in OFX
         # statements is described as "The current ledger balance".
         # 
@@ -652,17 +652,49 @@ class ParsedOfxStatement(object):
         # that is better than nothing. In an OFX document, each list of 
         # transactions (BANKTRANLIST) has an "exclusive ending date" (DTEND), 
         # and the ledger balance (LEDGERBAL) date is specified (DTASOF).
-        # ----------------------------------------------------------------------
-        #
-        # What this means is that we probably should only show the balance if
-        # both DTEND and DTASOF are the same. However in that case we see that
-        # sometimes DTASOF is not the exclusive (as a Beancount balance date
-        # should be) but the inclusive date.  To handle this situation we just
-        # compare the maximal DTTRADE|DTPOSTED with DTASOF. If they are equal
-        # it means DTASOF is not exclusive so we add 1 day. If DTASOF is
-        # greater we can use DTASOF. If DTASOF is smaller there is a problem
-        # and we ignore it.
+        # =====================================================================
+
         # ---------------------------------------------------------------------
+        # Note about abuse of DTEND.
+        #
+        # GJP 2020-06-06 Some banks do not use DTEND as they should.
+        #
+        # From the OFX 2.2 specification:
+        # =====================================================================
+        # If <DTEND> is absent, the client is requesting all available history
+        # (starting from <DTSTART>, if specified). Otherwise, it indicates the
+        # exclusive date and time in history where the client expects servers
+        # to stop sending information.
+        # =====================================================================
+
+        # ---------------------------------------------------------------------
+        # Proposed solution to show a proper balance.
+        #
+        # Given that the OFX balance is just the "The current ledger balance"
+        # we can determine the balance at the start of day DTASOF only if one
+        # of these conditions has been met:
+        # 1) DTEND is missing or DTEND > DTASOF
+        #    (hence transactions at DTASOF should be included)
+        # 2) DTEND = DTASOF and DTEND is inclusive
+        #    (not conform OFX!)
+        #
+        # The second case can only be proved for 100% if ... there are
+        # transactions on DTASOF otherwise a transaction which was not present
+        # in the OFX downloaded at 12:00 may be present in the OFX downloaded
+        # at 15:00 (with a different "now" balance).
+        #
+        # When DTEND < DTASOF, the balance shown in the OFX may be a balance
+        # with transactions at DTASOF but since those transactions are not (or
+        # better should not be) part of the OFX file, we can say nothing about
+        # the balance at the start of day DTASOF.
+        #
+        # In any case we only show the balance for one of these conditions:
+        # A) DTEND is missing or DTEND > DTASOF
+        # B) DTEND = DTASOF and there are transactions on DTASOF
+        #
+        # We will subtract the transactions at DTASOF from the balance to get a
+        # proper start balance as of date DTASOF.
+        # ---------------------------------------------------------------------        
         
         CHECK_DTASOF = True  # False is the old behaviour
 
@@ -744,20 +776,15 @@ class ParsedOfxStatement(object):
             dtasof = find_child(bal, 'dtasof', parse_ofx_time).date()            
             # See Note DTASOF and DTEND
             if CHECK_DTASOF:
-                if dtend is not None and dtend != dtasof:
-                    continue
-                max_date = max([raw.date for raw in raw_transactions]) if len(raw_transactions) > 0 else None
-                if max_date is None:
-                    continue
-                elif max_date == dtasof:
-                    # dtasof is inclusive: add 1 day for exclusivity as demanded by a beancount balance
-                    dtasof += datetime.timedelta(days=1)
-                elif dtasof > max_date:
-                    # dtasof is exclusive: okay
-                    pass
-                else:
-                    # dtasof is exclusive: error
-                    continue
+                if dtend is not None and dtend < dtasof:
+                    continue  # we can not determine a proper balance
+                dtasof_transaction_found = False
+                for raw in raw_transactions:
+                    if raw.date == dtasof:
+                        dtasof_transaction_found = True
+                        bal_amount -= raw.total
+                if dtend == dtasof and not(dtasof_transaction_found):
+                    continue  # we can not determine a proper balance
             else:
                 pass            
             raw_cash_balance_entries.append(

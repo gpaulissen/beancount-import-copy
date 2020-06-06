@@ -596,8 +596,3 @@
     ofx_name: "SNCF"
     ofx_type: "STMTTRN"
   Expenses:FIXME            6.15 EUR
-
-;; date: 2019-09-17
-;; info: {"filename": "<testdata>/.icscards_equal_transactions.txt.ofx", "type": "application/x-ofx"}
-
-2019-09-17 balance Liabilities:Credit-Card                         -1320.55 EUR

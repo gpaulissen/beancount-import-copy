@@ -67,8 +67,3 @@
     ofx_memo: "RETURNED CHECK FEE, CHECK # 319 FOR $45.33 ON 04/07/11"
     ofx_type: "STMTTRN"
   Expenses:FIXME    25.00 USD
-
-;; date: 2013-05-25
-;; info: {"filename": "<testdata>/checking.ofx", "type": "application/x-ofx"}
-
-2013-05-25 balance Assets:Checking                                 100.99 USD

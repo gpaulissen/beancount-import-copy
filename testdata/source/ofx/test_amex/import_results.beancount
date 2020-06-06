@@ -69,8 +69,3 @@
     ofx_name: "UNION MARKET - HOUSNEW YORK"
     ofx_type: "STMTTRN"
   Expenses:FIXME                 18.76 USD
-
-;; date: 2014-01-12
-;; info: {"filename": "<testdata>/amex.ofx", "type": "application/x-ofx"}
-
-2014-01-12 balance Liabilities:Credit-Card:Amex                    -2356.38 USD

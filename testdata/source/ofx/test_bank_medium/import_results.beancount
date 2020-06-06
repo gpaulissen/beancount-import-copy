@@ -67,8 +67,3 @@
     ofx_memo: "POS MERCHANDISE;CONNIE'S HAIR D"
     ofx_type: "STMTTRN"
   Expenses:FIXME    22.00 CAD
-
-;; date: 2009-05-23
-;; info: {"filename": "<testdata>/bank_medium.ofx", "type": "application/x-ofx"}
-
-2009-05-23 balance Assets:Checking                                 382.34 CAD
