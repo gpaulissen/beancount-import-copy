@@ -4,6 +4,8 @@ import pytest
 
 from .source_test import check_source_example
 
+from .ofx import CHECKNUM_NUMERIC, CHECK_BALANCE
+
 testdata_dir = os.path.realpath(
     os.path.join(
         os.path.dirname(__file__), '..', '..', 'testdata', 'source', 'ofx'))
@@ -38,10 +40,15 @@ examples = [
 
 @pytest.mark.parametrize('name,ofx_filename', examples)
 def test_source(name: str, ofx_filename: str):
+    CHECKNUM_NUMERIC = True
+    CHECK_BALANCE = False
+    if name in ['test_amex', 'test_bank_medium','test_checking_emptyledgerbal','test_suncorp']:
+        CHECKNUM_NUMERIC = False
+        CHECK_BALANCE = True
     check_source_example(
         example_dir=os.path.join(testdata_dir, name),
         source_spec={
             'module': 'beancount_import.source.ofx',
-            'ofx_filenames': [os.path.join(testdata_dir, ofx_filename)],
+            'ofx_filenames': [os.path.join(testdata_dir, ofx_filename)]
         },
         replacements=[(testdata_dir, '<testdata>')])

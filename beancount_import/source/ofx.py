@@ -58,6 +58,9 @@ expression like the following to specify the ofx source:
              + convert2ofx('mt940', glob.glob(os.path.join(journal_dir, 'data/institution3/*/*.mt940')))
          ),
          cache_filename=os.path.join(journal_dir, 'data/ofx_cache.pickle'),
+         checknum_numeric=lambda ofx_filename: False,
+         check_balance=lambda ofx_filename: False,
+         dtend_inclusive=lambda ofx_filename: None,
     )
 
 where `journal_dir` refers to the financial/ directory.
@@ -66,6 +69,41 @@ The `cache_filename` key is optional, but is recommended to speed up parsing if
 you have a large amount of OFX data.  When using the `cache_filename` option,
 adding and deleting OFX files is fine, but if you modify existing OFX files, you
 must delete the cache file manually.
+
+The `checknum_numeric` key is optional but can be used to handle numeric
+conversion for the CHECKNUM tag in the OFX file. The OFX standard says that
+CHECKNUM is just an alphanumeric string but the default behaviour of
+beancount-import was to try to convert it to a number. The `check_num` key is
+a callable function based on the filename being proessed.
+
+Emitting balance yes or no?
+---------------------------
+The `check_balance` key is optional but can be used to emit balances only if
+they are known to be correct. The value False does not do any checks (old
+behaviour) and just emits any balance seen. The value True will use the next
+key, see below.
+
+The `dtend_inclusive` key is only relevant if check_balance evaluates to True.
+We will use OFX tags BALAMT, DTASOF and DTEND to discuss the way how the key
+`dtend_inclusive` is used. BALAMT is the balance amount on date/time
+DTASOF. DTASOF is by definition the current date/time (date as of now), not
+the date/time of the closing balance of all transactions listed!  DTEND should
+be (according to OFX) the EXCLUSIVE end date for the list of transactions
+retrieved. But some banks use it as an INCLUSIVE date though.
+Anyway, these are the relevant cases:
+1) DTEND < DTASOF.
+So there may be transactions on DTASOF but they will not be listed in the
+file, so we just do not know if BALAMT is the same on another time that day. We
+can not use BALAMT reliably so we just do NOT emit it.
+2) DTEND = DTASOF and dtend_inclusive(ofx_filename) evaluates to False.
+Like case 1 if there are no transactions on day DTASOF. If there are
+transactions on day DTASOF we treat it like the next case.
+3) DTEND = DTASOF and dtend_inclusive(ofx_filename) evaluates to True.  
+So the end user assumes the OFX file may have transactions that day (thus not
+conform the OFX specifications). We know can calculate the balance at the
+beginning of day DTASOF by just deducting the transactions on day DTEND.
+4) DTEND missing or DTEND > DTASOF
+Like case 3 but just to be sure we also deduct transactions > DTASOF.
 
 Specifying individual accounts
 ==============================
@@ -428,7 +466,6 @@ of the manually created postings, as shown below:
 
 """
 
-import pdb
 import pickle
 import re
 from typing import Set, Tuple, Any, Dict, Union, List, Optional, NamedTuple, Callable
@@ -614,14 +651,16 @@ RELATED_ACCOUNT_KEYS = ['aftertax_account', 'pretax_account', 'match_account']
 # Tolerance allowed in transaction balancing.  In units of base currency used, e.g. USD.
 TOLERANCE = 0.05
 
-CHECKNUM_NUMERIC = True
+CHECKNUM_NUMERIC = True   # True is old behavior, not conform OFX
 
-CHECK_BALANCE = False
+CHECK_BALANCE = False     # False is old behavior
+
+DTEND_INCLUSIVE = False   # False is the default (conform OFX specifications) when check_balance is True
 
 
 class ParsedOfxStatement(object):
     def __init__(self, seen_fitids, filename, securities_map, org, stmtrs,
-                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE):
+                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE, dtend_inclusive=DTEND_INCLUSIVE):
         filename = os.path.abspath(filename)
         self.filename = filename
         self.securities_map = securities_map
@@ -644,67 +683,8 @@ class ParsedOfxStatement(object):
         cash_activity_dates = self.cash_activity_dates = set()
 
         self.ofx_id = account_ofx_id = (org, self.broker_id, account_id)
-
-        # ---------------------------------------------------------------------
-        # Note about DTASOF and DTEND.
-        #
-        # GJP 2020-03-04 The end balance is actually the end balance as of now
-        #
-        # See the discussion on https://github.com/odoo/odoo/issues/3003
-        #
-        # =====================================================================
-        # You're right, I did just RTFM and the balance provided in OFX
-        # statements is described as "The current ledger balance".
-        # 
-        # However, there might be a way to to get the starting/ending balance 
-        # that is better than nothing. In an OFX document, each list of 
-        # transactions (BANKTRANLIST) has an "exclusive ending date" (DTEND), 
-        # and the ledger balance (LEDGERBAL) date is specified (DTASOF).
-        # =====================================================================
-
-        # ---------------------------------------------------------------------
-        # Note about abuse of DTEND.
-        #
-        # GJP 2020-06-06 For some banks DTEND is not exclusive.
-        #
-        # From the OFX 2.2 specification:
-        # =====================================================================
-        # If <DTEND> is absent, the client is requesting all available history
-        # (starting from <DTSTART>, if specified). Otherwise, it indicates the
-        # exclusive date and time in history where the client expects servers
-        # to stop sending information.
-        # =====================================================================
-
-        # ---------------------------------------------------------------------
-        # Proposed solution to show a proper balance.
-        #
-        # Given that the OFX balance is just the "The current ledger balance"
-        # we can determine the balance at the start of day DTASOF only if one
-        # of these conditions has been met:
-        # 1) DTEND is missing or DTEND > DTASOF
-        #    (hence transactions at DTASOF should be included)
-        # 2) DTEND = DTASOF and DTEND is inclusive
-        #    (not conform OFX!)
-        #
-        # The second case can only be proved for 100% if ... there are
-        # transactions on DTASOF otherwise a transaction which was not present
-        # in the OFX downloaded at 12:00 may be present in the OFX downloaded
-        # at 15:00 (with a different "now" balance).
-        #
-        # When DTEND < DTASOF, the balance shown in the OFX may be a balance
-        # with transactions at DTASOF but since those transactions are not (or
-        # better should not be) part of the OFX file, we can say nothing about
-        # the balance at the start of day DTASOF.
-        #
-        # In any case we only show the balance for one of these conditions:
-        # A) DTEND is missing or DTEND > DTASOF
-        # B) DTEND = DTASOF and there are transactions on DTASOF
-        #
-        # We will subtract the transactions at DTASOF from the balance to get a
-        # proper start balance as of date DTASOF.
-        # ---------------------------------------------------------------------        
         
-        if check_balance:  # False is old behavior
+        if check_balance:
             dtend = stmtrs.find(re.compile('banktranlist'))
             if dtend:
                 # Use find_child and not dtend.find().get_text()
@@ -780,17 +760,23 @@ class ParsedOfxStatement(object):
             if not bal_amount_str.strip(): continue
             bal_amount = D(bal_amount_str)
             dtasof = find_child(bal, 'dtasof', parse_ofx_time).date()            
-            # See Note about DTASOF and DTEND
-            if check_balance:  # False is old behaviour
-                if dtend is not None and dtend < dtasof:
-                    continue  # we can not determine a proper balance
+            if check_balance:
                 dtasof_transaction_found = False
                 for raw in raw_transactions:
-                    if raw.date == dtasof:
+                    if raw.date >= dtasof:  # include > dtasof for case 5
                         dtasof_transaction_found = True
                         bal_amount -= raw.total
-                if dtend == dtasof and not(dtasof_transaction_found):
-                    continue  # we can not determine a proper balance
+                # See abopve (Emitting balance yes or no?)
+                # Case 1
+                if dtend is not None and dtend < dtasof:
+                    continue
+                if dtend is not None and dtend == dtasof and \
+                   dtend_inclusive == False and not(dtasof_transaction_found):
+                    # Case 2 (without a transaction on dtasof)
+                    continue 
+                else:
+                    # Cases 2 (with a transaction on dtasof), 3 and 4
+                    pass
             else:
                 pass            
             raw_cash_balance_entries.append(
@@ -954,10 +940,9 @@ class ParsedOfxStatement(object):
                 posting_meta[OFX_NAME_KEY] = name
 
             if raw.checknum:
-                pdb.set_trace()
                 # GJP 2020-01-18
                 # The CHECKNUM field is not numeric as described in the OFX 2.2 specification
-                if self.checknum_numeric:  # Old behavior, not conform OFX
+                if self.checknum_numeric:
                     stripped_checknum = raw.checknum.lstrip('0')
                     if stripped_checknum:
                         posting_meta[CHECK_KEY] = D(stripped_checknum)
@@ -1270,7 +1255,7 @@ class ParsedOfxStatement(object):
 
 class ParsedOfxFile(object):
     def __init__(self, seen_fitids, filename,
-                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE):
+                 checknum_numeric=CHECKNUM_NUMERIC, check_balance=CHECK_BALANCE, dtend_inclusive=DTEND_INCLUSIVE):
         self.filename = filename
         parsed_statements = self.parsed_statements = []
 
@@ -1294,7 +1279,8 @@ class ParsedOfxFile(object):
                     org=org,
                     stmtrs=stmtrs,
                     checknum_numeric=checknum_numeric,
-                    check_balance=check_balance))
+                    check_balance=check_balance,
+                    dtend_inclusive=dtend_inclusive))
 
 
 def get_account_map(accounts):
@@ -1451,6 +1437,7 @@ class OfxSource(Source):
                  cache_filename: Optional[str] = None,
                  checknum_numeric: Callable[[str], bool] = lambda ofx_filename: CHECKNUM_NUMERIC,
                  check_balance: Callable[[str], bool] = lambda ofx_filename: CHECK_BALANCE,
+                 dtend_inclusive: Callable[[str], bool] = lambda ofx_filename: DTEND_INCLUSIVE,
                  **kwargs) -> None:
         super().__init__(**kwargs)
         self.ofx_filenames = [os.path.realpath(x) for x in ofx_filenames]
@@ -1485,7 +1472,8 @@ class OfxSource(Source):
                 ParsedOfxFile(self.source_fitids,
                               filename,
                               checknum_numeric(filename),
-                              check_balance(filename)))
+                              check_balance(filename),
+                              dtend_inclusive(filename)))
 
         if cache_filename is not None:
             cache_data = {

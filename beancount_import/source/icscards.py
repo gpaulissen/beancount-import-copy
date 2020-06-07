@@ -50,7 +50,7 @@ See the corresponding section in ofx.py.
 
 """
 
-from typing import List
+from typing import List, Callable
 import os
 from subprocess import check_call, STDOUT
 
@@ -59,9 +59,12 @@ from . import ofx
 class OfxStatementSource(ofx.OfxSource):
     def __init__(self,
                  filenames: List[str],
+                 # The convert2ofx tool just uses the balance from the PDF
+                 # which is a start of day balance: no need to check
+                 check_balance: Callable[[str], bool] = lambda ofx_filename: False,
                  **kwargs) -> None:
         ofx_filenames = ofx.convert2ofx("nl-icscards", filenames)
-        super().__init__(ofx_filenames=ofx_filenames, checknum_numeric=lambda ofx_filename: False, **kwargs)
+        super().__init__(ofx_filenames=ofx_filenames, check_balance=check_balance, **kwargs)
 
     @property
     def name(self):
