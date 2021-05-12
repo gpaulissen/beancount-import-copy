@@ -29,7 +29,7 @@
     "@types/react-dom": "^16.0.7",
     "@types/react-measure": "^2.0.4",
     "@types/react-tabs": "^1.0.5",
-    "codemirror": "^5.39.2",
+    "codemirror": "^5.58.2",
     "common-prefix": "^1.1.0",
     "css-loader": "^1.0.0",
     "fbemitter": "^2.1.1",
